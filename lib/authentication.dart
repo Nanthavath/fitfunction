@@ -1,11 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitfunction/screens/createAccount/getEmailPage.dart';
 
 class Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  creteAccount(String _email, String _pass) async {
+  Future<FirebaseUser> createAccountWithEmail() async {
     FirebaseUser user = (await _auth.createUserWithEmailAndPassword(
-            email: _email, password: _pass))
+            email: users.email, password: users.password))
         .user;
+    return user;
+  }
+
+  Future<FirebaseUser> signInWithEmail() async {
+    FirebaseUser user = (await _auth.signInWithEmailAndPassword(
+            email: users.email, password: users.password))
+        .user;
+    return user;
+  }
+
+  signOut()async{
+   await _auth.signOut();
+
   }
 }

@@ -1,12 +1,14 @@
+import 'package:fitfunction/authentication.dart';
+import 'package:fitfunction/screens/createAccount/getEmailPage.dart';
 import 'package:fitfunction/screens/createAccount/getNamePage.dart';
+import 'package:fitfunction/screens/homePages/homePage.dart';
 import 'package:fitfunction/validator.dart';
 import 'package:flutter/material.dart';
 
 final formKey = GlobalKey<FormState>();
 
 class LoginPage extends StatelessWidget {
-  String _email;
-  String _password;
+  Authentication authentication = Authentication();
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,15 @@ class LoginPage extends StatelessWidget {
       ),
       onPressed: () {
         validate();
+        if (validate() == true) {
+          authentication.signInWithEmail().then((value) {
+            print(value.email);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (BuildContext context) => HomePage()),
+                (Route<dynamic> route) => false);
+          });
+        }
       },
     );
 
@@ -51,7 +62,7 @@ class LoginPage extends StatelessWidget {
         hintText: 'ລະຫັດຜ່ານ',
       ),
       validator: Validator.passwordValidate,
-      onSaved: (value) => _password = value,
+      onSaved: (value) => users.password = value,
     );
     final emailText = TextFormField(
       style: TextStyle(fontSize: 20),
@@ -62,7 +73,7 @@ class LoginPage extends StatelessWidget {
         hintText: 'ອີເມລ',
       ),
       validator: Validator.emailValidate,
-      onSaved: (value) => _email = value,
+      onSaved: (value) => users.email = value,
     );
     final logoArea = Container(
       color: Colors.black,

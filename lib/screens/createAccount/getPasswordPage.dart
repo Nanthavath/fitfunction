@@ -1,11 +1,17 @@
-
+import 'package:fitfunction/authentication.dart';
 import 'package:fitfunction/models/users.dart';
+import 'package:fitfunction/screens/homePages/homePage.dart';
 import 'package:fitfunction/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'getEmailPage.dart';
 
 final formKey = GlobalKey<FormState>();
-Users users=Users();
+
+Authentication authentication = Authentication();
+
 // ignore: must_be_immutable
 class GetPasswordPage extends StatelessWidget {
   @override
@@ -43,11 +49,17 @@ class GetPasswordPage extends StatelessWidget {
           ),
           onPressed: () async {
             validator();
+            if (validator() == true) {
+              authentication.createAccountWithEmail().then((value){
+                print(value.uid);
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => HomePage()),
+                        (Route<dynamic> route) => false);
+              });
 
-//            Navigator.of(context).pushAndRemoveUntil(
-//                MaterialPageRoute(
-//                    builder: (BuildContext context) => HomePage()),
-//                (Route<dynamic> route) => false);
+
+            }
           },
         ),
       ),

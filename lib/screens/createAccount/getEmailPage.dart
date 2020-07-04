@@ -5,10 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 final formKey = GlobalKey<FormState>();
+  Users users = Users();
 
 // ignore: must_be_immutable
 class GetEmailPage extends StatelessWidget {
-   Users users=Users();
   @override
   Widget build(BuildContext context) {
     final emailText = TextFormField(
