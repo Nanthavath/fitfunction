@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fitfunction/screens/createAccount/getEmailPage.dart';
+import 'package:fitfunction/screens/createAccount/getNamePage.dart';
 
 class Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -18,8 +18,7 @@ class Authentication {
     return user;
   }
 
-  signOut()async{
-   await _auth.signOut();
-
+  signOut() async {
+    await _auth.signOut();
   }
 }

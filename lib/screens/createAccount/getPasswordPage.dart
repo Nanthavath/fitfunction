@@ -1,12 +1,8 @@
 import 'package:fitfunction/authentication.dart';
-import 'package:fitfunction/models/users.dart';
-import 'package:fitfunction/screens/homePages/homePage.dart';
 import 'package:fitfunction/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-import 'getEmailPage.dart';
+import 'package:fitfunction/screens/createAccount/getNamePage.dart';
 
 final formKey = GlobalKey<FormState>();
 
@@ -14,8 +10,23 @@ Authentication authentication = Authentication();
 
 // ignore: must_be_immutable
 class GetPasswordPage extends StatelessWidget {
+  String _pass;
+
   @override
   Widget build(BuildContext context) {
+    final passwordText = TextFormField(
+      obscureText: true,
+      textAlign: TextAlign.center,
+      style: TextStyle(fontSize: 20),
+      decoration: InputDecoration(
+        hintText: 'ຢືນຢັນລະຫັດຜ່ານ',
+        hintStyle: TextStyle(fontSize: 20),
+      ),
+      validator: (value) {
+        return value != _pass ? 'ໃສ່ລະຫັດຜ່ານໃຫ້ຕົງກັນ' : null;
+      },
+      onChanged: (value) => users.password = value,
+    );
     final passText = TextFormField(
       obscureText: true,
       textAlign: TextAlign.center,
@@ -25,7 +36,7 @@ class GetPasswordPage extends StatelessWidget {
         hintStyle: TextStyle(fontSize: 20),
       ),
       validator: Validator.passwordValidate,
-      onSaved: (value) => users.password = value,
+      onSaved: (value) => _pass = value,
     );
     final summitButton = Align(
       alignment: Alignment.bottomRight,
@@ -49,17 +60,15 @@ class GetPasswordPage extends StatelessWidget {
           ),
           onPressed: () async {
             validator();
-            if (validator() == true) {
-              authentication.createAccountWithEmail().then((value){
-                print(value.uid);
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => HomePage()),
-                        (Route<dynamic> route) => false);
-              });
-
-
-            }
+//            if (validator() == true) {
+//              authentication.createAccountWithEmail().then((value){
+//                print(value.uid);
+//                Navigator.of(context).pushAndRemoveUntil(
+//                    MaterialPageRoute(
+//                        builder: (BuildContext context) => HomePage()),
+//                        (Route<dynamic> route) => false);
+//              });
+//            }
           },
         ),
       ),
@@ -94,6 +103,7 @@ class GetPasswordPage extends StatelessWidget {
                   child: ListView(
                     children: <Widget>[
                       passText,
+                      passwordText,
                       SizedBox(
                         height: 15,
                       ),
@@ -113,6 +123,8 @@ class GetPasswordPage extends StatelessWidget {
     formKey.currentState.save();
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
+      print('${users.password}');
+
       return true;
     } else {
       return false;

@@ -1,11 +1,11 @@
 import 'package:fitfunction/models/users.dart';
+import 'package:fitfunction/screens/createAccount/getNamePage.dart';
 import 'package:fitfunction/screens/createAccount/getPasswordPage.dart';
 import 'package:fitfunction/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 final formKey = GlobalKey<FormState>();
-  Users users = Users();
 
 // ignore: must_be_immutable
 class GetEmailPage extends StatelessWidget {

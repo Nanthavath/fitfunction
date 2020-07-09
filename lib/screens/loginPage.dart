@@ -1,4 +1,5 @@
 import 'package:fitfunction/authentication.dart';
+import 'package:fitfunction/models/users.dart';
 import 'package:fitfunction/screens/createAccount/getEmailPage.dart';
 import 'package:fitfunction/screens/createAccount/getNamePage.dart';
 import 'package:fitfunction/screens/homePages/homePage.dart';
@@ -9,6 +10,7 @@ final formKey = GlobalKey<FormState>();
 
 class LoginPage extends StatelessWidget {
   Authentication authentication = Authentication();
+  Users users = Users();
 
   @override
   Widget build(BuildContext context) {
