@@ -4,7 +4,7 @@ import 'package:fitfunction/validator.dart';
 import 'package:flutter/material.dart';
 
 final formKey = GlobalKey<FormState>();
-Users users=Users();
+//Users users=Users();
 // ignore: must_be_immutable
 class GetNamePage extends StatelessWidget {
   @override
@@ -17,7 +17,7 @@ class GetNamePage extends StatelessWidget {
           ),
           hintText: 'ນາມສະກຸນ'),
       validator: Validator.surnameValidate,
-      onSaved: (value) => users.surname = value,
+      onSaved: (value) => Users.surname = value,
     );
     final nameText = TextFormField(
       textAlign: TextAlign.center,
@@ -27,13 +27,14 @@ class GetNamePage extends StatelessWidget {
           ),
           hintText: 'ຊື່'),
       validator: Validator.nameValidate,
-      onSaved: (value) => users.name = value,
+      onSaved: (value) => Users.name = value,
     );
     final summitButton = Align(
       alignment: Alignment.bottomRight,
       child: SizedBox(
         width: 100,
         child: FloatingActionButton(
+          elevation: 0,
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
@@ -60,7 +61,9 @@ class GetNamePage extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             shape: BoxShape.circle, border: Border.all(color: Colors.orange)),
-        child: BackButton(),
+        child: BackButton(
+          color: Colors.orange,
+        ),
       ),
     );
     return Scaffold(

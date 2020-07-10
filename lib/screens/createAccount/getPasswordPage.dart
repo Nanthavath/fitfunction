@@ -1,4 +1,6 @@
 import 'package:fitfunction/authentication.dart';
+import 'package:fitfunction/models/users.dart';
+import 'package:fitfunction/screens/homePages/homePage.dart';
 import 'package:fitfunction/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +27,7 @@ class GetPasswordPage extends StatelessWidget {
       validator: (value) {
         return value != _pass ? 'ໃສ່ລະຫັດຜ່ານໃຫ້ຕົງກັນ' : null;
       },
-      onChanged: (value) => users.password = value,
+      onChanged: (value) => Users.password = value,
     );
     final passText = TextFormField(
       obscureText: true,
@@ -60,14 +62,15 @@ class GetPasswordPage extends StatelessWidget {
           ),
           onPressed: () async {
             validator();
+            if (validator() == true) {
+              submit(context);
+            } else {
+              print('Register Fail');
+            }
 //            if (validator() == true) {
 //              authentication.createAccountWithEmail().then((value){
 //                print(value.uid);
-//                Navigator.of(context).pushAndRemoveUntil(
-//                    MaterialPageRoute(
-//                        builder: (BuildContext context) => HomePage()),
-//                        (Route<dynamic> route) => false);
-//              });
+//
 //            }
           },
         ),
@@ -123,11 +126,20 @@ class GetPasswordPage extends StatelessWidget {
     formKey.currentState.save();
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
-      print('${users.password}');
+      print('${Users.password}');
 
       return true;
     } else {
       return false;
     }
+  }
+
+  void submit(BuildContext context) {
+    Users.createUserWithEmail().then((value) {
+      print(value.uid);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => HomePage()),
+          (Route<dynamic> route) => false);
+    });
   }
 }

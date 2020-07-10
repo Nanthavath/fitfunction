@@ -20,7 +20,7 @@ class GetEmailPage extends StatelessWidget {
         hintStyle: TextStyle(fontSize: 20),
       ),
       validator: Validator.emailValidate,
-      onSaved: (value) => users.email = value,
+      onSaved: (value) => Users.email = value,
     );
     final summitButton = Align(
       alignment: Alignment.bottomRight,
@@ -95,7 +95,7 @@ class GetEmailPage extends StatelessWidget {
     form.save();
     if (form.validate()) {
       form.save();
-      print('${users.email}');
+      print('${Users.email}');
 
       Navigator.of(context).push(
         MaterialPageRoute(

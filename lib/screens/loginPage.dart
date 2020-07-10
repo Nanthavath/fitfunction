@@ -5,12 +5,19 @@ import 'package:fitfunction/screens/createAccount/getNamePage.dart';
 import 'package:fitfunction/screens/homePages/homePage.dart';
 import 'package:fitfunction/validator.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 final formKey = GlobalKey<FormState>();
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   Authentication authentication = Authentication();
-  Users users = Users();
+  String email;
+  String pass;
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +51,7 @@ class LoginPage extends StatelessWidget {
       onPressed: () {
         validate();
         if (validate() == true) {
-          authentication.signInWithEmail().then((value) {
-            print(value.email);
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                    builder: (BuildContext context) => HomePage()),
-                (Route<dynamic> route) => false);
-          });
+          submit();
         }
       },
     );
@@ -64,7 +65,7 @@ class LoginPage extends StatelessWidget {
         hintText: 'ລະຫັດຜ່ານ',
       ),
       validator: Validator.passwordValidate,
-      onSaved: (value) => users.password = value,
+      onSaved: (value) => pass = value,
     );
     final emailText = TextFormField(
       style: TextStyle(fontSize: 20),
@@ -75,7 +76,7 @@ class LoginPage extends StatelessWidget {
         hintText: 'ອີເມລ',
       ),
       validator: Validator.emailValidate,
-      onSaved: (value) => users.email = value,
+      onSaved: (value) => email = value,
     );
     final logoArea = Container(
       color: Colors.black,
@@ -139,5 +140,35 @@ class LoginPage extends StatelessWidget {
     } else {
       return false;
     }
+  }
+
+  void submit() {
+    authentication.signInWithEmail(email, pass).then((value) {
+      print(value.email);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => HomePage()),
+          (Route<dynamic> route) => false);
+    }).catchError((response) {
+      String title = response.code;
+      String message = response.message;
+      myAlert(title, message);
+    });
+  }
+
+  void myAlert(String title, String message) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('OK'),
+                onPressed: () => Navigator.of(context).pop(),
+              )
+            ],
+          );
+        });
   }
 }
