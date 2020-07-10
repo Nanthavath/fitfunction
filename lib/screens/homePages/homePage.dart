@@ -1,9 +1,8 @@
 import 'package:fitfunction/authentication.dart';
 import 'package:fitfunction/screens/homePages/menu_page.dart';
-import 'package:fitfunction/screens/homePages/post_page.dart';
+import 'package:fitfunction/screens/homePages/postPages/post_page.dart';
 import 'package:fitfunction/screens/homePages/profile_page.dart';
 import 'package:fitfunction/screens/homePages/workout_page.dart';
-import 'package:fitfunction/screens/loginPage.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
