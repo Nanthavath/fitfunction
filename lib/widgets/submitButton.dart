@@ -13,7 +13,7 @@ class SubmitButton extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomRight,
       child: SizedBox(
-        height: 50,
+        height: 40,
         width: 100,
         child: FloatingActionButton(
           elevation: 1,

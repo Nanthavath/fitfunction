@@ -10,6 +10,7 @@ class MyBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     assert(debugCheckHasMaterialLocalizations(context));
     return Container(
+      width: 40,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(color: color),
