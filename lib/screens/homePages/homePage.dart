@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Authentication authentication = Authentication();
+  Authen authentication = Authen();
   ScrollController scrollController;
 
   @override

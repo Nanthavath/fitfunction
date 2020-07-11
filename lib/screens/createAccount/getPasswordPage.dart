@@ -8,7 +8,7 @@ import 'package:fitfunction/screens/createAccount/getNamePage.dart';
 
 final formKey = GlobalKey<FormState>();
 
-Authentication authentication = Authentication();
+Authen authentication = Authen();
 
 // ignore: must_be_immutable
 class GetPasswordPage extends StatelessWidget {

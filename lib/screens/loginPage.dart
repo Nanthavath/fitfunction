@@ -15,9 +15,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  Authentication authentication = Authentication();
+  Authen authentication = Authen();
   String email;
   String pass;
+
+  @override
+  void initState() {
+    super.initState();
+    switchPage();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,5 +176,15 @@ class _LoginPageState extends State<LoginPage> {
             ],
           );
         });
+  }
+
+  Future<String> switchPage() async{
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    FirebaseUser user = await _auth.currentUser();
+    if (user.uid != null) {
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+    }
+    return user.uid;
   }
 }

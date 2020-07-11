@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitfunction/models/users.dart';
 import 'package:fitfunction/screens/createAccount/getNamePage.dart';
 
-class Authentication {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+class Authen {
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<FirebaseUser> signInWithEmail(String email, String pass) async {
     FirebaseUser user =
@@ -12,11 +12,16 @@ class Authentication {
     return user;
   }
 
-  Future<void> signOut() async {
-    await _auth.signOut();
+  static Future<dynamic> signOut() async {
+    try {
+      return await _auth.signOut();
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
   }
 
-  Future<FirebaseUser> currentUser() async {
+  static Future<FirebaseUser> currentUser() async {
     FirebaseUser user = await _auth.currentUser();
     return user;
   }
