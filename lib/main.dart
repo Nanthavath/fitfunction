@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'BoonHome',
         primarySwatch: Colors.orange,
       ),
-      home: LoginPage(),
+      home: SwitchPage(),
     );
   }
 }

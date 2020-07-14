@@ -13,7 +13,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Authen authentication = Authen();
   ScrollController scrollController;
-
   @override
   Widget build(BuildContext context) {
     var flexibleSpaceWidget = SliverAppBar(

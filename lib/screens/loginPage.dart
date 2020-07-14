@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    switchPage();
+    //switchPage();
   }
 
   @override
@@ -178,13 +178,13 @@ class _LoginPageState extends State<LoginPage> {
         });
   }
 
-  Future<String> switchPage() async{
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    FirebaseUser user = await _auth.currentUser();
-    if (user.uid != null) {
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (BuildContext context) => HomePage()));
-    }
-    return user.uid;
-  }
+//  Future<String> switchPage() async{
+//    FirebaseAuth _auth = FirebaseAuth.instance;
+//    FirebaseUser user = await _auth.currentUser();
+//    if (user.uid != null) {
+//      Navigator.of(context).push(
+//          MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+//    }
+//    return user.uid;
+//  }
 }
