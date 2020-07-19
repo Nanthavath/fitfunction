@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitfunction/screens/homePages/postPages/create_post.dart';
+import 'package:fitfunction/widgets/circularProgress.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -60,8 +62,12 @@ class _PostPageState extends State<PostPage> {
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: Text('Loading...'),
+              child: CircularProgress(
+                title: 'ກຳລັງໂຫລດ...',
+              ),
             );
+          } else if (snapshot== null) {
+            return Container();
           } else {
             return Column(
               children: <Widget>[
@@ -70,7 +76,6 @@ class _PostPageState extends State<PostPage> {
                   height: 55,
                   child: circleAvatars(context),
                 ),
-
                 Expanded(
                   child: ListView.builder(
                     itemCount: snapshot.data.length,
@@ -131,7 +136,9 @@ class _PostPageState extends State<PostPage> {
                                         color: Colors.orange,
                                       ),
                                       label: Text('15'),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        //checkCurentUser();
+                                      },
                                     ),
                                   ],
                                 ),
@@ -150,4 +157,10 @@ class _PostPageState extends State<PostPage> {
       ),
     );
   }
+
+//  Future<void> checkCurentUser()async {
+//    FirebaseAuth _auth=FirebaseAuth.instance;
+//    FirebaseUser user=await _auth.currentUser();
+//    print(user.uid);
+//  }
 }

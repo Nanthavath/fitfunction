@@ -1,3 +1,4 @@
+import 'package:fitfunction/models/adapter.dart';
 import 'package:fitfunction/models/users.dart';
 import 'package:fitfunction/screens/createAccount/getBirthDayPage.dart';
 import 'package:fitfunction/validator.dart';
@@ -7,8 +8,11 @@ final formKey = GlobalKey<FormState>();
 //Users users=Users();
 // ignore: must_be_immutable
 class GetNamePage extends StatelessWidget {
+//Users users=Users();
+
   @override
   Widget build(BuildContext context) {
+    myUser=Users();
     final surnameText = TextFormField(
       textAlign: TextAlign.center,
       decoration: InputDecoration(
@@ -17,7 +21,7 @@ class GetNamePage extends StatelessWidget {
           ),
           hintText: 'ນາມສະກຸນ'),
       validator: Validator.surnameValidate,
-      onSaved: (value) => Users.surname = value,
+      onSaved: (value)=>myUser.surname,
     );
     final nameText = TextFormField(
       textAlign: TextAlign.center,
@@ -27,7 +31,7 @@ class GetNamePage extends StatelessWidget {
           ),
           hintText: 'ຊື່'),
       validator: Validator.nameValidate,
-      onSaved: (value) => Users.name = value,
+      onSaved: (value) => myUser.name,
     );
     final summitButton = Align(
       alignment: Alignment.bottomRight,

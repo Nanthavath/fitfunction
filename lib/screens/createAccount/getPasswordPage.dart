@@ -1,4 +1,5 @@
 import 'package:fitfunction/authentication.dart';
+import 'package:fitfunction/models/adapter.dart';
 import 'package:fitfunction/models/users.dart';
 import 'package:fitfunction/screens/homePages/homePage.dart';
 import 'package:fitfunction/validator.dart';
@@ -27,7 +28,7 @@ class GetPasswordPage extends StatelessWidget {
       validator: (value) {
         return value != _pass ? 'ໃສ່ລະຫັດຜ່ານໃຫ້ຕົງກັນ' : null;
       },
-      onChanged: (value) => Users.password = value,
+      onChanged: (value) => myUser.password = value,
     );
     final passText = TextFormField(
       obscureText: true,
@@ -126,7 +127,7 @@ class GetPasswordPage extends StatelessWidget {
     formKey.currentState.save();
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
-      print('${Users.password}');
+      print('${myUser.password}');
 
       return true;
     } else {
@@ -135,7 +136,7 @@ class GetPasswordPage extends StatelessWidget {
   }
 
   void submit(BuildContext context) {
-    Users.createUserWithEmail().then((value) {
+    myUser.createUserWithEmail().then((value) {
       print(value.uid);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => HomePage()),

@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitfunction/authentication.dart';
 import 'package:fitfunction/screens/homePages/homePage.dart';
+import 'package:fitfunction/screens/homePages/profiles/profile_page.dart';
+import 'package:fitfunction/screens/homePages/profiles/view_profile.dart';
 import 'package:fitfunction/screens/loginPage.dart';
 import 'package:fitfunction/screens/switchPage.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'BoonHome',
         primarySwatch: Colors.orange,
       ),
-      home: SwitchPage(),
+      home: LoginPage(),
     );
   }
 }

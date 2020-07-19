@@ -175,7 +175,7 @@ class _BuildPostState extends State<BuildPost> {
               SubmitButton(
                 title: 'ສ້າງໂພສ',
                 onPressed: () {
-                  if (post.uploadImageToStorage(file) != null) {
+                  if (post.uploadImageToStorage(file)!= null) {
                     Navigator.of(context).maybePop();
                   }
                 },

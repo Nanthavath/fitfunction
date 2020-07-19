@@ -4,14 +4,16 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:fitfunction/screens/loginPage.dart';
+
+import 'adapter.dart';
 
 class Post {
   static final FirebaseAuth auth = FirebaseAuth.instance;
-  static final Firestore userModel = Firestore.instance;
-
+  Firestore userModel ;
   static String captions;
   String urlPost;
-  String timestap;
+  String timestamp;
 
 //  // File file;
 //  Post({this.captions, this.urlPost, this.timestap});
@@ -21,6 +23,7 @@ class Post {
     int i = random.nextInt(100000);
     FirebaseStorage storage = FirebaseStorage.instance;
     StorageReference reference = storage.ref().child('posts/postss$i');
+
     StorageUploadTask uploadTask = reference.putFile(file);
     String urlPhoto = await (await uploadTask.onComplete).ref.getDownloadURL();
     print(urlPhoto);
@@ -29,15 +32,17 @@ class Post {
   }
 
   Future<void> uploadToFireStore(String urlPhoto) async {
-    Firestore _fireStore = Firestore.instance;
-    FirebaseAuth auth = FirebaseAuth.instance;
-    FirebaseUser user = await auth.currentUser();
+//    Firestore _fireStore = Firestore.instance;
+    userModel = Firestore.instance;
+//    FirebaseAuth auth = FirebaseAuth.instance;
+//    FirebaseUser user = await auth.currentUser();
     Map<String, dynamic> map = Map();
     map['caption'] = captions;
     map['urlPhoto'] = urlPhoto;
-    map['userID'] = user.uid;
+    map['userID'] = currentUser.uid;
+    map['timestamp']=timestamp;
 
-    await _fireStore
+    await userModel
         .collection('Posts')
         .document()
         .setData(map)

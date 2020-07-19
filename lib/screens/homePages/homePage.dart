@@ -1,7 +1,7 @@
 import 'package:fitfunction/authentication.dart';
 import 'package:fitfunction/screens/homePages/menu_page.dart';
 import 'package:fitfunction/screens/homePages/postPages/post_page.dart';
-import 'package:fitfunction/screens/homePages/profile_page.dart';
+import 'file:///C:/Users/msi/Desktop/fitfunction/lib/screens/homePages/profiles/profile_page.dart';
 import 'package:fitfunction/screens/homePages/workout_page.dart';
 import 'package:flutter/material.dart';
 

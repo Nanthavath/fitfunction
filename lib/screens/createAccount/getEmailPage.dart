@@ -1,3 +1,4 @@
+import 'package:fitfunction/models/adapter.dart';
 import 'package:fitfunction/models/users.dart';
 import 'package:fitfunction/screens/createAccount/getNamePage.dart';
 import 'package:fitfunction/screens/createAccount/getPasswordPage.dart';
@@ -20,7 +21,7 @@ class GetEmailPage extends StatelessWidget {
         hintStyle: TextStyle(fontSize: 20),
       ),
       validator: Validator.emailValidate,
-      onSaved: (value) => Users.email = value,
+      onSaved: (value) => myUser.email = value,
     );
     final summitButton = Align(
       alignment: Alignment.bottomRight,
@@ -95,7 +96,7 @@ class GetEmailPage extends StatelessWidget {
     form.save();
     if (form.validate()) {
       form.save();
-      print('${Users.email}');
+      print('${myUser.email}');
 
       Navigator.of(context).push(
         MaterialPageRoute(

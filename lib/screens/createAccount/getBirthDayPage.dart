@@ -1,3 +1,4 @@
+import 'package:fitfunction/models/adapter.dart';
 import 'package:fitfunction/models/users.dart';
 import 'package:fitfunction/screens/createAccount/getNamePage.dart';
 import 'package:fitfunction/screens/createAccount/getEmailPage.dart';
@@ -45,7 +46,7 @@ class _GetBirthDayPageState extends State<GetBirthDayPage> {
             if (value == Genders.male) {
               _gender = 'ຊາຍ';
             }
-            Users.gender = _gender;
+            myUser.gender = _gender;
           });
         },
       ),
@@ -61,7 +62,7 @@ class _GetBirthDayPageState extends State<GetBirthDayPage> {
             if (value == Genders.female) {
               _gender = 'ຍິງ';
             }
-            Users.gender = _gender;
+            myUser.gender = _gender;
           });
         },
       ),
@@ -141,7 +142,7 @@ class _GetBirthDayPageState extends State<GetBirthDayPage> {
                             icon: Icon(Icons.calendar_today),
                             onPressed: () {
                               _selectDate(context);
-                              Users.birthDay =
+                              myUser.birthDay =
                                   '${selectedDate.toLocal()}'.split(' ')[0];
                             },
                           ),
@@ -173,6 +174,6 @@ class _GetBirthDayPageState extends State<GetBirthDayPage> {
   void submit(BuildContext context) {
     Navigator.of(context).push(
         MaterialPageRoute(builder: (BuildContext context) => GetEmailPage()));
-    print('${Users.birthDay}\nGender:${Users.gender}');
+    print('${myUser.birthDay}\nGender:${myUser.gender}');
   }
 }
