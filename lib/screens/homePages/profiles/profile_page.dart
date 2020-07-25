@@ -1,7 +1,12 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitfunction/models/adapter.dart';
+import 'package:fitfunction/models/users.dart';
 import 'package:fitfunction/screens/homePages/profiles/edit_profile.dart';
 import 'package:fitfunction/screens/homePages/profiles/view_profile.dart';
+import 'package:fitfunction/widgets/circularProgress.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,13 +19,16 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   File fileCover;
   File fileProfile;
+
   final picker = ImagePicker();
+  Users users = Users();
 
   Future<void> choosePictureCover(ImageSource imageSource) async {
     try {
       final object = await picker.getImage(source: imageSource);
       setState(() {
         fileCover = File(object.path);
+        setCoverProfile();
       });
     } catch (ex) {}
   }
@@ -30,108 +38,135 @@ class _ProfilePageState extends State<ProfilePage> {
       final object = await picker.getImage(source: imageSource);
       setState(() {
         fileProfile = File(object.path);
+        setProfile();
       });
     } catch (ex) {}
+  }
+
+  // Controller _controller=Controller();
+  Future getData() async {
+    Firestore firestoreInstance = Firestore.instance;
+    var firebaseUser = await FirebaseAuth.instance.currentUser();
+    return firestoreInstance
+        .collection("Users")
+        .document(firebaseUser.uid)
+        .get();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: ListView(
-          children: <Widget>[
-            Container(
-              //color: Colors.green,
-              height: MediaQuery.of(context).size.height / 3,
-              child: Stack(
-                children: <Widget>[
-                  InkWell(
-                    child: Container(
-                      //color: Colors.blue,
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height / 3.5,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: fileCover == null
-                                  ? AssetImage('images/cats.jpg')
-                                  : FileImage(fileCover),
-                              fit: BoxFit.fill)),
-                    ),
-                    onTap: () {
-                      actionSheetCover();
-                    },
-                  ),
-                  Center(
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: InkWell(
+        body: FutureBuilder(
+      future: getData(),
+      builder: (_, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgress(
+              title: 'ກຳລັງໂຫລດ',
+            ),
+          );
+        } else {
+          return Container(
+            child: ListView(
+              children: <Widget>[
+                Container(
+                  //color: Colors.green,
+                  height: MediaQuery.of(context).size.height / 3,
+                  child: Stack(
+                    children: <Widget>[
+                      InkWell(
                         child: Container(
-                          height: 100,
-                          width: 100,
+                          //color: Colors.blue,
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height / 3.5,
                           decoration: BoxDecoration(
-                              color: Colors.amber,
-                              shape: BoxShape.circle,
-                              border:
-                                  Border.all(width: 1.5, color: Colors.white),
-                              image: DecorationImage(
-                                image: fileProfile == null
-                                    ? AssetImage('images/app_logo.png')
-                                    : FileImage(fileProfile, scale: 1.0),
-                              )),
+                            image: DecorationImage(
+                                image: snapshot.data['urlCover'] == null
+                                    ? AssetImage('images/cats.jpg')
+                                    : NetworkImage(snapshot.data['urlCover']),
+                                fit: BoxFit.fill),
+                          ),
                         ),
                         onTap: () {
-                          //actionSheetModel();
-                          actionSheetProfile();
+                          actionSheetCover();
                         },
                       ),
+                      Center(
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: InkWell(
+                            child: Container(
+                              height: 100,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  color: Colors.amber,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      width: 1.5, color: Colors.white),
+                                  image: DecorationImage(
+                                      image: snapshot.data['urlProfile'] == null
+                                          ? AssetImage('images/app_logo.png')
+                                          : NetworkImage(
+                                              snapshot.data['urlProfile']))),
+                            ),
+                            onTap: () {
+                              //actionSheetModel();
+                              actionSheetProfile();
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    '${snapshot.data['name']} ${snapshot.data['surname']}',
+                    style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: FlatButton(
+                    child: Text(
+                      'ແກ້ໄຂ',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => EditProfile()));
+                    },
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 30),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                            'ສະຖານະ: ${snapshot.data['relationship'] == null ? 'ບໍ່ໄດ້ກຳນັດ' : snapshot.data['relationship']}'),
+                        Divider(),
+                        Text('ວັນເດືອນປີເກີດ:  ${snapshot.data['birthDay']}'),
+                        Divider(),
+                        Text('ຄຳອະທິບາຍ:Workout Work body'),
+                        Divider(),
+                        Text('Level:Basic'),
+                        Divider(),
+//                    Expanded(
+//                      child: Container(),
+//                    ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-            Center(
-              child: Text(
-                'Nanthavath Vongsouna',
-                style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: FlatButton(
-                child: Text(
-                  'ແກ້ໄຂ',
-                  style: TextStyle(fontSize: 20),
                 ),
-                onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => EditProfile()));
-                },
-              ),
+              ],
             ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                margin: EdgeInsets.only(left: 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('ສະຖານະ: Single'),
-                    Divider(),
-                    Text('ຄຳອະທິບາຍ:Workout Work body'),
-                    Divider(),
-                    Text('Level:Basic'),
-                    Divider(),
-                    Expanded(
-                      child: Container(),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+          );
+        }
+      },
+    ));
   }
 
   void actionSheetCover() {
@@ -182,6 +217,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     onTap: () {
                       choosePictureCover(ImageSource.gallery);
+
                       Navigator.of(context).pop();
                     },
                   ),
@@ -196,6 +232,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     onTap: () {
                       choosePictureCover(ImageSource.camera);
+                      setCoverProfile();
                       Navigator.of(context).pop();
                     },
                   ),
@@ -204,6 +241,10 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           );
         });
+  }
+
+  void setCoverProfile() {
+    users.uploadImageToStorage(fileCover);
   }
 
   Future<void> showChoiceDialogProfile() {
@@ -276,5 +317,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void changeProfile() {
     showChoiceDialogProfile();
+  }
+
+  void setProfile() {
+    users.uploadImageToStorage(fileProfile);
   }
 }

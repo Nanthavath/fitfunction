@@ -149,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void submit() {
     authentication.signInWithEmail(email, pass).then((value) {
-     currentUser=value;
+     currentUser= value;
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => HomePage()),
           (Route<dynamic> route) => false);

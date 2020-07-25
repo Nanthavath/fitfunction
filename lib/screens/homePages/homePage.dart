@@ -1,8 +1,8 @@
 import 'package:fitfunction/authentication.dart';
-import 'package:fitfunction/screens/homePages/menu_page.dart';
+import 'package:fitfunction/screens/homePages/menuPages/menu_page.dart';
 import 'package:fitfunction/screens/homePages/postPages/post_page.dart';
-import 'file:///C:/Users/msi/Desktop/fitfunction/lib/screens/homePages/profiles/profile_page.dart';
-import 'package:fitfunction/screens/homePages/workout_page.dart';
+import 'package:fitfunction/screens/homePages/profiles/profile_page.dart';
+import 'file:///C:/Users/Admin/OneDrive/Desktop/fitfunction/lib/screens/homePages/workoutPage/workout_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,6 +13,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Authen authentication = Authen();
   ScrollController scrollController;
+
   @override
   Widget build(BuildContext context) {
     var flexibleSpaceWidget = SliverAppBar(
@@ -34,16 +35,19 @@ class _HomePageState extends State<HomePage> {
         unselectedLabelColor: Colors.black26,
         tabs: [
           Tab(
-            icon: Image.asset('images/home.png'),
+            icon: Image.asset(
+              'images/home.png',
+              width: 30,
+            ),
           ),
           Tab(
-            icon: Image.asset('images/dumbbell.png'),
+            icon: Image.asset('images/dumbbell.png', width: 30),
           ),
           Tab(
-            icon: Image.asset('images/person.png'),
+            icon: Image.asset('images/person.png', width: 30),
           ),
           Tab(
-            icon: Image.asset('images/menu.png'),
+            icon: Image.asset('images/menu.png', width: 30),
           ),
         ],
       ),
@@ -51,25 +55,28 @@ class _HomePageState extends State<HomePage> {
       floating: true,
     );
 
-    return Scaffold(
-      body: SafeArea(
-        child: DefaultTabController(
-          length: 4,
-          child: NestedScrollView(
-            controller: scrollController,
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                flexibleSpaceWidget,
-              ];
-            },
-            body: TabBarView(
-              children: <Widget>[
-                PostPage(),
-                WorkoutPage(),
-                ProfilePage(),
-                MenuPage(),
-              ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: SafeArea(
+          child: DefaultTabController(
+            length: 4,
+            child: NestedScrollView(
+              controller: scrollController,
+              headerSliverBuilder:
+                  (BuildContext context, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  flexibleSpaceWidget,
+                ];
+              },
+              body: TabBarView(
+                children: <Widget>[
+                  PostPage(),
+                  WorkoutPage(),
+                  ProfilePage(),
+                  MenuPage(),
+                ],
+              ),
             ),
           ),
         ),
@@ -77,28 +84,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-// class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-//   final TabBar _tabBar;
-
-//   _SliverAppBarDelegate(this._tabBar);
-
-//   @override
-//   double get minExtent => _tabBar.preferredSize.height;
-
-//   @override
-//   double get maxExtent => _tabBar.preferredSize.height;
-
-//   @override
-//   Widget build(
-//       BuildContext context, double shrinkOffset, bool overlapsContent) {
-//     return new Container(
-//       child: _tabBar,
-//     );
-//   }
-
-//   @override
-//   bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-//     return false;
-//   }
-// }

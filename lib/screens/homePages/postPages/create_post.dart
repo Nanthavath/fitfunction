@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitfunction/models/adapter.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -177,7 +178,9 @@ class _BuildPostState extends State<BuildPost> {
                 onPressed: () {
                   if (post.uploadImageToStorage(file)!= null) {
                     Navigator.of(context).maybePop();
+                    print(currentUser.uid);
                   }
+
                 },
               ),
             ],

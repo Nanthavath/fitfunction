@@ -66,7 +66,7 @@ class _PostPageState extends State<PostPage> {
                 title: 'ກຳລັງໂຫລດ...',
               ),
             );
-          } else if (snapshot== null) {
+          } else if (snapshot == null) {
             return Container();
           } else {
             return Column(
@@ -110,9 +110,10 @@ class _PostPageState extends State<PostPage> {
                                   right: 10,
                                 ),
                                 child: Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                        snapshot.data[index].data['caption'])),
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                      snapshot.data[index].data['caption']==null?'':snapshot.data[index].data['caption']),
+                                ),
                               ),
                               Image.network(
                                   snapshot.data[index].data['urlPhoto']),

@@ -25,8 +25,8 @@ class _GetBirthDayPageState extends State<GetBirthDayPage> {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
+        firstDate: DateTime(1990),
+        lastDate: DateTime(2021));
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;

@@ -5,4 +5,13 @@ import 'package:image_picker/image_picker.dart';
 
 Users myUser;
 FirebaseUser currentUser;
-class Controller {}
+
+class Controller {
+  static Future<void> getCurrentUser() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser().then((value){
+     return currentUser=value;
+    });
+
+
+  }
+}

@@ -22,20 +22,17 @@ class Post {
     Random random = Random();
     int i = random.nextInt(100000);
     FirebaseStorage storage = FirebaseStorage.instance;
-    StorageReference reference = storage.ref().child('posts/postss$i');
+    StorageReference reference = storage.ref().child('posts/posts_$i');
 
     StorageUploadTask uploadTask = reference.putFile(file);
     String urlPhoto = await (await uploadTask.onComplete).ref.getDownloadURL();
     print(urlPhoto);
-    uploadToFireStore(urlPhoto);
+    uploadToDatabase(urlPhoto);
     return urlPhoto;
   }
 
-  Future<void> uploadToFireStore(String urlPhoto) async {
-//    Firestore _fireStore = Firestore.instance;
+  Future<void> uploadToDatabase(String urlPhoto) async {
     userModel = Firestore.instance;
-//    FirebaseAuth auth = FirebaseAuth.instance;
-//    FirebaseUser user = await auth.currentUser();
     Map<String, dynamic> map = Map();
     map['caption'] = captions;
     map['urlPhoto'] = urlPhoto;

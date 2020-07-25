@@ -21,7 +21,7 @@ class GetNamePage extends StatelessWidget {
           ),
           hintText: 'ນາມສະກຸນ'),
       validator: Validator.surnameValidate,
-      onSaved: (value)=>myUser.surname,
+      onSaved: (value)=>myUser.surname=value,
     );
     final nameText = TextFormField(
       textAlign: TextAlign.center,
@@ -31,7 +31,7 @@ class GetNamePage extends StatelessWidget {
           ),
           hintText: 'ຊື່'),
       validator: Validator.nameValidate,
-      onSaved: (value) => myUser.name,
+      onSaved: (value) => myUser.name=value,
     );
     final summitButton = Align(
       alignment: Alignment.bottomRight,
