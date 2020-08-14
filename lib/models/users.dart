@@ -17,8 +17,8 @@ class Users {
   String _password;
   String _birthDay;
   String _gender;
-  String _urlProfile;
-  String _urlCover;
+  String _urlProfile="https://firebasestorage.googleapis.com/v0/b/fitfunction-1d97a.appspot.com/o/profile%20.png?alt=media&token=5df4f44b-3ab3-43bd-b2f6-42d397dafb1f";
+  String _urlCover='https://firebasestorage.googleapis.com/v0/b/fitfunction-1d97a.appspot.com/o/cover.png?alt=media&token=8d9ec91b-eb87-41bf-b95d-ab842a33b4d6';
   String _relationship;
   String _caption;
   String _level;

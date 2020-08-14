@@ -45,9 +45,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // Controller _controller=Controller();
   Future getData() async {
-    Firestore firestoreInstance = Firestore.instance;
+    Firestore fireStoreInstance = Firestore.instance;
     var firebaseUser = await FirebaseAuth.instance.currentUser();
-    return firestoreInstance
+    return fireStoreInstance
         .collection("Users")
         .document(firebaseUser.uid)
         .get();

@@ -7,11 +7,5 @@ Users myUser;
 FirebaseUser currentUser;
 
 class Controller {
-  static Future<void> getCurrentUser() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser().then((value){
-     return currentUser=value;
-    });
 
-
-  }
 }

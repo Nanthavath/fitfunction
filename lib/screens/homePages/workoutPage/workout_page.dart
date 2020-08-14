@@ -1,4 +1,6 @@
+import 'package:fitfunction/screens/homePages/workoutPage/createPlan_page.dart';
 import 'package:fitfunction/screens/homePages/workoutPage/myPlan_page.dart';
+import 'package:fitfunction/screens/homePages/workoutPage/view_workout_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,31 +12,83 @@ class WorkoutPage extends StatefulWidget {
 class _WorkoutPageState extends State<WorkoutPage> {
   @override
   Widget build(BuildContext context) {
-    final favoriteLis = ListView(
+    final sharePlan = Container(
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return InkWell(
+            child: Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              elevation: 3,
+              child: Container(
+                width: MediaQuery.of(context).size.width / 2,
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                        leading: Image.asset(
+                          'images/person.png',
+                          width: 20,
+                        ),
+                        title: Text(
+                          'My Plan$index',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        trailing: Icon(
+                          Icons.favorite_border,
+                          color: Colors.orange,
+                        )),
+                  ],
+                ),
+              ),
+            ),
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => ViewWorkoutPage()));
+            },
+          );
+        },
+      ),
+    );
+    final favoriteLis = ListView.builder(
       scrollDirection: Axis.horizontal,
-      children: <Widget>[
-        Container(
-          color: Colors.red,
-          width: MediaQuery.of(context).size.width / 2,
-          height: 100,
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        Container(
-          color: Colors.blue,
-          height: 100,
-          width: MediaQuery.of(context).size.width / 2,
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        Container(
-          color: Colors.orange,
-          height: 100,
-          width: MediaQuery.of(context).size.width / 2,
-        ),
-      ],
+      itemCount: 4,
+      itemBuilder: (context, index) {
+        return InkWell(
+          child: Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            elevation: 3,
+            child: Container(
+              width: MediaQuery.of(context).size.width / 2.2,
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                      leading: Image.asset(
+                        'images/person.png',
+                        width: 20,
+                      ),
+                      title: Text(
+                        'My Plan$index',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      trailing: Icon(
+                        Icons.favorite,
+                        color: Colors.orange,
+                      )),
+                  Text('Level: Beginning'),
+                  Text('Type: Beginning'),
+                ],
+              ),
+            ),
+          ),
+          onTap: () {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => ViewWorkoutPage()));
+          },
+        );
+      },
     );
 
     final ownList = ListView.builder(
@@ -47,7 +101,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             elevation: 3,
             child: Container(
-              width: MediaQuery.of(context).size.width / 2,
+              width: MediaQuery.of(context).size.width / 2.2,
               child: Column(
                 children: <Widget>[
                   ListTile(
@@ -74,16 +128,22 @@ class _WorkoutPageState extends State<WorkoutPage> {
       },
     );
 
-    final createButton = RaisedButton.icon(
-      elevation: 1,
-      color: Colors.white70,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+    final createButton = Align(
+      alignment: Alignment.topRight,
+      child: RaisedButton.icon(
+        elevation: 1,
+        color: Colors.white70,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        padding: EdgeInsets.all(5),
+        icon: Icon(Icons.add),
+        label: Text('ສ້າງແຜນໃຫມ່'),
+        onPressed: () {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => CreatePlan()));
+        },
       ),
-      padding: EdgeInsets.all(5),
-      icon: Icon(Icons.add),
-      label: Text('ສ້າງແຜນໃຫມ່'),
-      onPressed: () {},
     );
 
     final searchText = SizedBox(
@@ -103,30 +163,20 @@ class _WorkoutPageState extends State<WorkoutPage> {
     );
     return Scaffold(
       body: Container(
-        margin: EdgeInsets.all(15),
+        margin: EdgeInsets.only(left: 10, right: 10, top: 10),
         child: Column(
           children: <Widget>[
             searchText,
-            Align(
-              alignment: Alignment.bottomRight,
-              child: createButton,
+            createButton,
+            Container(
+              height: 120,
+              child: ownList,
             ),
-            Expanded(
-                child: ListView(
-              children: <Widget>[
-                Container(
-                  height: 150,
-                  child: ownList,
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  height: 100,
-                  child: favoriteLis,
-                ),
-              ],
-            ))
+            Container(
+              height: 120,
+              child: favoriteLis,
+            ),
+            Expanded(child: sharePlan),
           ],
         ),
       ),

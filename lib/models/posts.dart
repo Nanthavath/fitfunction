@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -5,44 +6,71 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fitfunction/screens/loginPage.dart';
+import 'package:fitfunction/widgets/circularProgress.dart';
 
 import 'adapter.dart';
 
 class Post {
-  static final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseStorage storage = FirebaseStorage.instance;
   Firestore userModel ;
-  static String captions;
-  String urlPost;
-  String timestamp;
+  String _captions;
+  String _urlPost;
+  Timestamp timestamp;
+  List<String> _uidLike;
 
-//  // File file;
-//  Post({this.captions, this.urlPost, this.timestap});
+  List<String> get uidLike => _uidLike;
 
-  Future<String> uploadImageToStorage(File file) async {
-    Random random = Random();
-    int i = random.nextInt(100000);
-    FirebaseStorage storage = FirebaseStorage.instance;
-    StorageReference reference = storage.ref().child('posts/posts_$i');
-
-    StorageUploadTask uploadTask = reference.putFile(file);
-    String urlPhoto = await (await uploadTask.onComplete).ref.getDownloadURL();
-    print(urlPhoto);
-    uploadToDatabase(urlPhoto);
-    return urlPhoto;
+  set uidLike(List<String> value) {
+    _uidLike = value;
   }
 
-  Future<void> uploadToDatabase(String urlPhoto) async {
+  String get captions => _captions;
+
+  set captions(String value) {
+    _captions = value;
+  }
+  String get urlPost => _urlPost;
+
+  set urlPost(String value) {
+    _urlPost = value;
+  }
+
+  Future<String>uploadImageToStorage(File file) async {
+    Random random = Random();
+    int i = random.nextInt(999999999);
+    StorageReference reference = storage.ref().child('posts/posts-fitfunction$i');
+    StorageUploadTask uploadTask = reference.putFile(file);
+    urlPost = await (await uploadTask.onComplete).ref.getDownloadURL();
+    uploadToDatabase();
+    return urlPost;
+  }
+
+  Future<void> uploadToDatabase() async {
+    currentUser=await FirebaseAuth.instance.currentUser();
     userModel = Firestore.instance;
+    timestamp=Timestamp.now();
     Map<String, dynamic> map = Map();
     map['caption'] = captions;
-    map['urlPhoto'] = urlPhoto;
+    map['urlPhoto'] = urlPost;
     map['userID'] = currentUser.uid;
     map['timestamp']=timestamp;
-
+    map['uidLike']=uidLike=[];
     await userModel
         .collection('Posts')
         .document()
         .setData(map)
         .then((value) => print('upload success'));
+  }
+ Future<void> deletePost(String currentPost) async{
+   await Firestore.instance.collection('Posts').document(currentPost).delete();
+  }
+  Future<void>savePost(String currentPostID)async{
+    timestamp=Timestamp.now();
+    Firestore.instance.collection('SavePost').document().setData({
+      'postID':currentPostID,
+      'timestamp':timestamp,
+      'userID':currentUser.uid,
+    });
   }
 }

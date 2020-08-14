@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitfunction/authentication.dart';
+import 'package:fitfunction/models/adapter.dart';
 import 'package:fitfunction/screens/homePages/menuPages/menu_page.dart';
 import 'package:fitfunction/screens/homePages/postPages/post_page.dart';
 import 'package:fitfunction/screens/homePages/profiles/profile_page.dart';
@@ -13,10 +15,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Authen authentication = Authen();
   ScrollController scrollController;
-
+@override
+  void initState() {
+  currentUsers();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var flexibleSpaceWidget = SliverAppBar(
+      automaticallyImplyLeading: false,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
         title: Center(
@@ -31,8 +38,9 @@ class _HomePageState extends State<HomePage> {
       ),
       backgroundColor: Colors.white,
       bottom: TabBar(
-        labelColor: Colors.black87,
-        unselectedLabelColor: Colors.black26,
+       // labelColor: Colors.black87,
+        //unselectedLabelColor: Colors.black26,
+
         tabs: [
           Tab(
             icon: Image.asset(
@@ -82,5 +90,10 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Future<void> currentUsers() async{
+    currentUser =await FirebaseAuth.instance.currentUser();
+
   }
 }
