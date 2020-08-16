@@ -4,6 +4,7 @@ import 'package:fitfunction/screens/homePages/homePage.dart';
 import 'package:fitfunction/screens/homePages/menuPages/menu_page.dart';
 import 'package:fitfunction/screens/homePages/profiles/profile_page.dart';
 import 'package:fitfunction/screens/homePages/profiles/view_profile.dart';
+import 'package:fitfunction/screens/homePages/workoutPage/createPlan_page.dart';
 import 'package:fitfunction/screens/homePages/workoutPage/workout_page.dart';
 import 'package:fitfunction/screens/loginPage.dart';
 import 'package:fitfunction/screens/switchPage.dart';

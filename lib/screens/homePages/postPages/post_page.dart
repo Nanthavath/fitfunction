@@ -1,22 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:commons/commons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitfunction/models/adapter.dart';
 import 'package:fitfunction/models/posts.dart';
+import 'package:fitfunction/screens/homePages/postPages/comment_post.dart';
 import 'package:fitfunction/screens/homePages/postPages/create_post.dart';
+import 'package:fitfunction/screens/homePages/postPages/edit_post.dart';
 import 'package:fitfunction/widgets/circularProgress.dart';
 import 'package:fitfunction/widgets/timer_current.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:fitfunction/models/adapter.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PostPage extends StatefulWidget {
   @override
   _PostPageState createState() => _PostPageState();
 }
 
-String urlProfile =
-    'https://firebasestorage.googleapis.com/v0/b/fitfunction-1d97a.appspot.com/o/cover.png?alt=media&token=8d9ec91b-eb87-41bf-b95d-ab842a33b4d6';
+//String urlProfile =
+//    'https://firebasestorage.googleapis.com/v0/b/fitfunction-1d97a.appspot.com/o/cover.png?alt=media&token=8d9ec91b-eb87-41bf-b95d-ab842a33b4d6';
 
 DateTime now = DateTime.now();
 String timStamp = DateFormat('kk:mm:ss').format(now);
@@ -45,7 +49,7 @@ class _PostPageState extends State<PostPage> {
               height: 30,
               child: FlatButton(
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(width: 0.5, color: Colors.grey),
+                  side: BorderSide(width: 1, color: Colors.grey),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -128,8 +132,8 @@ class _PostPageState extends State<PostPage> {
                                     // color: Colors.red,
                                     child: ListTile(
                                       leading: CircleAvatar(
-                                        backgroundImage:
-                                            NetworkImage(urlProfile),
+                                        backgroundImage: NetworkImage(
+                                            snapName.data['urlProfile']),
                                       ),
                                       title: Text(snapName.data['name'] +
                                           ' ' +
@@ -140,7 +144,9 @@ class _PostPageState extends State<PostPage> {
                                           ? PopupMenuButton(
                                               onSelected: (value) {
                                                 chooseItem(
-                                                    value, snapPost.documentID);
+                                                    value,
+                                                    snapPost.documentID,
+                                                    snapPost);
                                               },
                                               itemBuilder: (context) => [
                                                 PopupMenuItem(
@@ -158,11 +164,16 @@ class _PostPageState extends State<PostPage> {
                                               ],
                                             )
                                           : PopupMenuButton(
-                                              onSelected: (value) {},
+                                              onSelected: (value) {
+                                                chooseItem(
+                                                    value,
+                                                    snapPost.documentID,
+                                                    snapPost);
+                                              },
                                               itemBuilder: (context) => [
                                                 PopupMenuItem(
                                                   child: Text('ບັນທຶກ'),
-                                                  value: 3,
+                                                  value: 1,
                                                 ),
                                               ],
                                             ),
@@ -194,8 +205,22 @@ class _PostPageState extends State<PostPage> {
                                             Icons.comment,
                                             color: Colors.orange,
                                           ),
-                                          label: Text('0 ຄວາມຄິດເຫັນ'),
-                                          onPressed: () {},
+                                          label: StreamBuilder(
+                                            stream: Firestore.instance.collection('Comments').where('postID', isEqualTo: snapPost.documentID ).snapshots(),
+                                            builder: (context, snapCommentLength){
+                                              if (!snapCommentLength.hasData) {
+                                                return Text('0 ຄວາມຄິດເຫັນ');
+                                              }
+                                              return Text('${snapCommentLength.data.documents.length} ຄວາມຄິດເຫັນ');
+                                            },
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      CommentPage(snapPost.documentID.toString())),
+                                            );
+                                          },
                                         ),
                                         FlatButton.icon(
                                           icon: snapPost.data['uidLike']
@@ -250,7 +275,7 @@ class _PostPageState extends State<PostPage> {
     );
   }
 
-  void chooseItem(value, String currentPostID) {
+  void chooseItem(value, String currentPostID, DocumentSnapshot snapPost) {
     switch (value) {
       case 1:
         Stream<QuerySnapshot> savePostSnap = Firestore.instance
@@ -260,15 +285,33 @@ class _PostPageState extends State<PostPage> {
             .snapshots();
         savePostSnap.listen((event) {
           print(event.documents.length.toString());
-          if (event.documents.length >0) {
+          if (event.documents.length > 0) {
             print('Mg save Leo');
+            Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text(
+                'ທ່ານໄດ້ບັນທຶກແລ້ວ',
+                style: TextStyle(fontSize: 15),
+                textAlign: TextAlign.center,
+              ),
+              backgroundColor: Colors.red,
+            ));
           } else {
             post.savePost(currentPostID);
+            successDialog(context, 'ບັນທຶກສຳເລັດແລ້ວ');
           }
         });
 
         break;
       case 2:
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) => EditPost(
+              currentPostID,
+              snapPost.data['caption'].toString(),
+              snapPost.data['urlPhoto'].toString(),
+            ),
+          ),
+        );
         break;
       case 3:
         print(currentPostID);

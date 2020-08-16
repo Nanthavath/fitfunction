@@ -1,5 +1,5 @@
 import 'package:fitfunction/screens/homePages/workoutPage/createPlan_page.dart';
-import 'package:fitfunction/screens/homePages/workoutPage/myPlan_page.dart';
+import 'package:fitfunction/screens/homePages/workoutPage/myplan.dart';
 import 'package:fitfunction/screens/homePages/workoutPage/view_workout_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -137,7 +137,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
           borderRadius: BorderRadius.circular(15),
         ),
         padding: EdgeInsets.all(5),
-        icon: Icon(Icons.add),
+        icon: Icon(Icons.add,color: Colors.orange,),
         label: Text('ສ້າງແຜນໃຫມ່'),
         onPressed: () {
           Navigator.of(context).push(

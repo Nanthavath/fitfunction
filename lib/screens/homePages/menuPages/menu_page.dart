@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitfunction/authentication.dart';
+import 'package:fitfunction/screens/homePages/menuPages/exercises/exercises_page.dart';
 import 'package:fitfunction/screens/homePages/menuPages/favorite_page.dart';
 import 'package:fitfunction/screens/homePages/menuPages/gyms_page.dart';
 import 'package:fitfunction/screens/homePages/menuPages/save_page.dart';
@@ -15,6 +16,61 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
+    final foods = InkWell(
+      child: Card(
+        color: Colors.orange,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Container(
+          margin: EdgeInsets.all(10),
+          height: 90,
+          child: Text(
+            'Food',
+            style: TextStyle(
+                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => GymPage()));
+      },
+    );
+    final excercises = InkWell(
+      child: Card(
+        color: Colors.orange,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Container(
+          margin: EdgeInsets.all(10),
+          height: 90,
+          child: Stack(
+            children: [
+              Center(
+                  child: Image.asset(
+                    'images/basic.png',
+                    fit: BoxFit.contain,
+                  )),
+
+              Text(
+                'EXERCISES',
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+
+            ],
+          ),
+        ),
+      ),
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ExercisePage()));
+      },
+    );
     final gymButton = InkWell(
       child: Card(
         color: Colors.orange,
@@ -107,6 +163,12 @@ class _MenuPageState extends State<MenuPage> {
                 Expanded(
                   child: saveButton,
                 ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(child: excercises),
+                foods,
               ],
             ),
           ],
