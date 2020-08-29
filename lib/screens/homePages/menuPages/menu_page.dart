@@ -2,9 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitfunction/authentication.dart';
 import 'package:fitfunction/screens/homePages/menuPages/exercises/exercises_page.dart';
 import 'package:fitfunction/screens/homePages/menuPages/favorite_page.dart';
-import 'package:fitfunction/screens/homePages/menuPages/gyms_page.dart';
+import 'file:///C:/Users/Admin/OneDrive/Desktop/fitfunction/lib/screens/homePages/menuPages/gyms/gyms_page.dart';
 import 'package:fitfunction/screens/homePages/menuPages/save_page.dart';
 import 'package:fitfunction/screens/loginPage.dart';
+import 'package:fitfunction/widgets/circularProgress.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -170,6 +171,19 @@ class _MenuPageState extends State<MenuPage> {
                 Expanded(child: excercises),
                 foods,
               ],
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: RaisedButton(
+                child: Text('ອອກຈາກລະບົບ'),
+                onPressed: (){
+                  signOut().then((value){
+                    CircularProgress(
+                      title: 'ກຳລັງອອກຈາກລະບົບ',
+                    );
+                  });
+                },
+              ),
             ),
           ],
         ),

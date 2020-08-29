@@ -1,12 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fitfunction/models/workout_item.dart';
+import 'package:fitfunction/screens/homePages/workoutPage/summary_page.dart';
 import 'package:fitfunction/widgets/backButton.dart';
 import 'package:fitfunction/widgets/submitButton.dart';
 import 'package:flutter/material.dart';
+import 'package:commons/commons.dart';
+
+import 'createPlan_page.dart';
+
+List<WorkoutItem> summeryData = [];
 
 class SetPlan extends StatefulWidget {
   @override
   _SetPlanState createState() => _SetPlanState();
 }
 
+List selectedActivity = [];
 List<String> bodyPart = [
   'Back',
   'Chest',
@@ -18,7 +27,23 @@ List<String> bodyPart = [
   'Lower Leg'
 ];
 
+bool isCheck = false;
+int dayIndex = 0;
+int n = 0;
+List selectedEx = [];
+
 class _SetPlanState extends State<SetPlan> {
+//  int indexOfDay(){
+//
+//  }
+  @override
+  void initState() {
+    dayIndex = 0;
+    n = 0;
+    summeryData = [];
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final searchBox = SizedBox(
@@ -40,6 +65,7 @@ class _SetPlanState extends State<SetPlan> {
             hintText: 'ຄົ້ນຫາ'),
       ),
     );
+
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -54,13 +80,13 @@ class _SetPlanState extends State<SetPlan> {
                     width: 20,
                   ),
                   Text(
-                    'My Plan',
+                    '${workoutModel.namePlan}',
                     style: TextStyle(fontSize: 25, color: Colors.orange),
                   ),
                 ],
               ),
               Text(
-                'Monday',
+                '${workoutModel.selectedDayName[dayIndex]}',
                 style: TextStyle(fontSize: 20),
               ),
               SizedBox(
@@ -125,29 +151,79 @@ class _SetPlanState extends State<SetPlan> {
               )),
               Expanded(
                 child: Container(
-                  child: ListView.builder(
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          border:Border(bottom: BorderSide(width: 0.1))
-                        ),
-                        child: ListTile(
-                          leading: CircleAvatar(),
-                          title: Text('Name of Exercises'),
-                          subtitle: Text('Type'),
-                          trailing: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: OutlineButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
+                  child: StreamBuilder(
+                    stream:
+                        Firestore.instance.collection('Exercises').snapshots(),
+                    builder: (context, snapshot) {
+                      if (selectedActivity.length == 0) {
+                        selectedActivity = List(100);
+                        for (int i = 0; i < 100; i++) {
+                          selectedActivity[i] = false;
+                        }
+                      }
+                      //  print('size:${selectedActivity.length}');
+                      if (!snapshot.hasData) {
+                        return Container();
+                      }
+
+                      return ListView.builder(
+                        itemCount: snapshot.data.documents.length,
+                        itemBuilder: (context, index) {
+                          DocumentSnapshot snapExercises =
+                              snapshot.data.documents[index];
+                          return Container(
+                            decoration: BoxDecoration(
+                                border: Border(bottom: BorderSide(width: 0.1))),
+                            child: ListTile(
+//                                onTap: (){
+//                                  setState(() {
+////                                    isCheck=true;
+////                                  if(isCheck){
+////                                    selectedActivity[index]=isCheck;
+////                                  }else{
+////                                    selectedActivity[index]=!isCheck;
+////                                  }
+//
+//                            print(selectedActivity[index]);
+//                                  });
+//
+//                                },
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    snapExercises.data['urlPhoto']),
                               ),
-                              color: Colors.orange,
-                              onPressed: (){},
+                              title: Text(snapExercises.data['exname']),
+                              subtitle: Text('Type'),
+                              trailing: ChoiceChip(
+                                label: Text(' '),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                selected: selectedActivity[index],
+                                backgroundColor: Color(0xffededed),
+                                onSelected: (isSelected) {
+                                  setState(() {
+                                    selectedActivity[index] = isSelected;
+//                                 print(selectedActivity[index]);
+                                    //    selectedEx=[];
+
+                                    if (isSelected) {
+                                      selectedEx
+                                          .add(snapExercises.documentID);
+                                    } else {
+                                      selectedEx
+                                          .remove(snapExercises.documentID);
+                                    }
+
+//                                    print(snapExercises.data['exname']);
+//                                    print(selectedEx);
+                                  });
+                                },
+                                selectedColor: Colors.orange,
+                              ),
                             ),
-                          )
-                        ),
+                          );
+                        },
                       );
                     },
                   ),
@@ -159,7 +235,40 @@ class _SetPlanState extends State<SetPlan> {
                   margin: EdgeInsets.all(15),
                   child: SubmitButton(
                     title: 'ຖັດໄປ',
-                    onPressed: (){},
+                    onPressed: () {
+                      setState(() {
+                        WorkoutItem item;
+                        if (dayIndex == 0) {
+                          summeryData = [];
+                        }
+                        if (dayIndex < workoutModel.dayPerWeek) {
+                          if (selectedEx.length > 0) {
+                            item = WorkoutItem(
+                                workoutModel.selectedDayName[dayIndex],
+                                selectedEx.toList());
+                            summeryData.add(item);
+
+                            selectedActivity = [];
+                            selectedEx = [];
+                          } else {
+                            warningDialog(context, 'ກະລຸນາເລືອກກິດຈະກຳ');
+                            return;
+                          }
+                          //   n++;
+                          dayIndex++;
+                        }
+                        if (dayIndex == workoutModel.dayPerWeek) {
+//                          for (int i = 0; i < summeryData.length; i++) {
+//                            print(summeryData[i].selectedExercises.length);
+//                            print('***************');
+//                          }
+                          dayIndex = 0;
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => SummaryPage()));
+                        }
+
+                      });
+                    },
                   ),
                 ),
               ),

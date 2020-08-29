@@ -37,6 +37,8 @@ dependencies:
   commons: ^0.7.8+3
   fluttertoast: ^7.0.2
   custom_radio_grouped_button: ^1.0.5
+  flutter_simple_rating_bar: ^0.0.3
+  smooth_star_rating: ^1.1.1
   #image_picker: ^0.6.7+4
   intl: ^0.16.1
   image_picker: ^0.6.7+4

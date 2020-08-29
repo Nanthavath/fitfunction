@@ -73,12 +73,12 @@ class _PostPageState extends State<PostPage> {
     );
   }
 
-  Future getPost() async {
-    Firestore store = Firestore.instance;
-    QuerySnapshot querySnapshot =
-        await store.collection('Posts').getDocuments();
-    return querySnapshot.documents;
-  }
+//  Future<int> getPost() async {
+//    Firestore store = Firestore.instance;
+//    QuerySnapshot querySnapshot =
+//        await store.collection('Posts').getDocuments();
+//    return querySnapshot.documents.length;
+//  }
 
   @override
   Widget build(BuildContext context) {
