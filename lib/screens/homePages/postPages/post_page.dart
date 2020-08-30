@@ -11,6 +11,7 @@ import 'package:fitfunction/widgets/timer_current.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitfunction/models/adapter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -193,7 +194,7 @@ class _PostPageState extends State<PostPage> {
                                               : snapPost.data['caption']),
                                     ),
                                   ),
-                                  Image.network(snapPost.data['urlPhoto']),
+                                  Image(image: CachedNetworkImageProvider(snapPost.data['urlPhoto'],)),
                                   Container(
                                     height: 50,
                                     //color: Colors.red,
@@ -206,19 +207,28 @@ class _PostPageState extends State<PostPage> {
                                             color: Colors.orange,
                                           ),
                                           label: StreamBuilder(
-                                            stream: Firestore.instance.collection('Comments').where('postID', isEqualTo: snapPost.documentID ).snapshots(),
-                                            builder: (context, snapCommentLength){
+                                            stream: Firestore.instance
+                                                .collection('Comments')
+                                                .where('postID',
+                                                    isEqualTo:
+                                                        snapPost.documentID)
+                                                .snapshots(),
+                                            builder:
+                                                (context, snapCommentLength) {
                                               if (!snapCommentLength.hasData) {
                                                 return Text('0 ຄວາມຄິດເຫັນ');
                                               }
-                                              return Text('${snapCommentLength.data.documents.length} ຄວາມຄິດເຫັນ');
+                                              return Text(
+                                                  '${snapCommentLength.data.documents.length} ຄວາມຄິດເຫັນ');
                                             },
                                           ),
                                           onPressed: () {
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      CommentPage(snapPost.documentID.toString())),
+                                                      CommentPage(snapPost
+                                                          .documentID
+                                                          .toString())),
                                             );
                                           },
                                         ),

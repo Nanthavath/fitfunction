@@ -83,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             image: DecorationImage(
                                 image: snapshot.data['urlCover'] == null
                                     ? AssetImage('images/cats.jpg')
-                                    : NetworkImage(snapshot.data['urlCover']),
+                                    : NetworkImage('https://www.sleekcover.com/covers/just-live-facebook-cover.jpg'),
                                 fit: BoxFit.fill),
                           ),
                         ),
