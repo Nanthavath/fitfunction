@@ -22,8 +22,16 @@ class Users {
   String _relationship;
   String _caption;
   String _level;
+  String _weight;
+  String _height;
 
   Users();
+
+  String get weight => _weight;
+
+  set weight(String value) {
+    _weight = value;
+  }
 
   String get caption => _caption;
 
@@ -90,6 +98,11 @@ class Users {
   set level(String value) {
     _level = value;
   }
+  String get height => _height;
+
+  set height(String value) {
+    _height = value;
+  }
 
   Future<FirebaseUser> createUserWithEmail() async {
     try {
@@ -109,6 +122,8 @@ class Users {
       maps['relationship'] = relationship;
       maps['caption'] = caption;
       maps['level'] = level;
+      maps['weight']=weight;
+      maps['height']=height;
       await userModel.collection('Users').document(uid).setData(maps);
       return user;
     } catch (e) {
@@ -122,13 +137,16 @@ class Users {
     Map<String, dynamic> maps = Map();
     maps['name'] = name;
     maps['surname'] = surname;
-    maps['gender'] = gender;
+    maps['caption'] = caption;
+    // maps['gender'] = gender;
     maps['birthDay'] = birthDay;
-    maps['email'] = email;
-    maps['password'] = password;
-    maps['urlProfile'] = urlProfile;
-    maps['urlCover'] = urlCover;
-    maps['relationship'] = relationship;
+    // maps['email'] = email;
+    // maps['password'] = password;
+    // maps['urlProfile'] = urlProfile;
+    // maps['urlCover'] = urlCover;
+    // maps['relationship'] = relationship;
+    maps['weight']=weight;
+    maps['height']=height;
     await userModel
         .collection('Users')
         .document(currentUser.uid)
@@ -141,14 +159,9 @@ class Users {
     final StorageReference storageReference =
         FirebaseStorage().ref().child('covers/cover_$i');
     final StorageUploadTask uploadTask = storageReference.putFile(file);
-    final StreamSubscription<StorageTaskEvent> streamSubscription =
-        uploadTask.events.listen((event) {
-      print('EVENT ${event.type}');
-      return event;
-    });
+
     String url = await (await uploadTask.onComplete).ref.getDownloadURL();
     print(url);
-
     updateCover(url);
     //urlCover=url;
   }
@@ -159,4 +172,6 @@ class Users {
       'urlCover': url,
     });
   }
+
+
 }

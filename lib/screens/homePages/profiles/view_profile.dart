@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 class ViewProfile extends StatelessWidget {
-  File file;
+  String file;
 
   ViewProfile({this.file});
 
@@ -27,7 +27,7 @@ class ViewProfile extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              file == null ? Container() : Image.file(file),
+              file == null ? Container() : Image.network(file),
             ],
           ),
         ),

@@ -22,7 +22,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
           return Container();
         } else if (snapshot.data == null) {
           return Container();
-        }else{
+        } else {
           return Column(
             children: List.generate(snapshot.data.documents.length, (index) {
               DocumentSnapshot snapShare = snapshot.data.documents[index];
@@ -36,7 +36,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
                     return Container();
                   } else if (snapWorkout.data == null) {
                     return Container();
-                  }else{
+                  } else {
                     return StreamBuilder(
                       stream: Firestore.instance
                           .collection('Users')
@@ -47,20 +47,20 @@ class _WorkoutPageState extends State<WorkoutPage> {
                           return Container();
                         }
                         return Container(
-                          margin: EdgeInsets.only(right: 8),
+                          margin: EdgeInsets.only(bottom: 10),
                           child: Card(
                             child: ListTile(
                               leading: CircleAvatar(
-                                backgroundImage:
-                                NetworkImage(snapUserInfo.data['urlProfile']),
+                                backgroundImage: NetworkImage(
+                                    snapUserInfo.data['urlProfile']),
                                 backgroundColor: Colors.transparent,
                               ),
                               title: Text(snapWorkout.data['workoutName']),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(TimerCurrent()
-                                      .readTimestamp(snapShare.data['timestamp'])),
+                                  Text(TimerCurrent().readTimestamp(
+                                      snapShare.data['timestamp'])),
                                   Text(
                                       '${snapUserInfo.data['name']} ${snapUserInfo.data['surname']}'),
                                   Text('Level: ${snapWorkout.data['level']}'),
@@ -88,13 +88,11 @@ class _WorkoutPageState extends State<WorkoutPage> {
                       },
                     );
                   }
-
                 },
               );
             }),
           );
         }
-
       },
     );
     final favoriteLis = ListView.builder(
@@ -172,93 +170,97 @@ class _WorkoutPageState extends State<WorkoutPage> {
         ),
       ),
     );
-    return Scaffold(
-      body: Container(
-        margin: EdgeInsets.only(left: 10, right: 10, top: 10),
-        child: StreamBuilder(
-          stream: Firestore.instance.collection('Workout').snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgress(
-                title: 'ກຳລັງໂຫຼດ...',
-              );
-            }
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                searchText,
-                createButton,
-                Container(
-                  height: 120,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (context, index) {
-                      DocumentSnapshot snapWorkout =
-                          snapshot.data.documents[index];
-                      return StreamBuilder(
-                        stream: Firestore.instance
-                            .collection('Users')
-                            .document(snapWorkout.data['userID'])
-                            .snapshots(),
-                        builder: (context, snapUserInfo) {
-                          if (!snapUserInfo.hasData) {
-                            return Container();
-                          }
-                          return InkWell(
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15)),
-                              elevation: 3,
-                              child: Container(
-                                margin: EdgeInsets.all(3),
-                                width: MediaQuery.of(context).size.width / 2,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundImage: NetworkImage(
-                                              '${snapUserInfo.data['urlProfile']}'),
-                                          backgroundColor: Colors.transparent,
-                                        ),
-                                        title: Text(
-                                          '${snapWorkout.data['workoutName']}',
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                        trailing: Icon(Icons.more_vert)),
-                                    Text('Level: ${snapWorkout.data['level']}'),
-                                    Text('Type: ${snapWorkout.data['type']}'),
-                                  ],
+    return ListView(
+      children: [
+        Container(
+          margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+          child: StreamBuilder(
+            stream: Firestore.instance.collection('Workout').snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgress(
+                  title: 'ກຳລັງໂຫຼດ...',
+                );
+              }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  searchText,
+                  createButton,
+                  Container(
+                    height: 120,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: snapshot.data.documents.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot snapWorkout =
+                            snapshot.data.documents[index];
+                        return StreamBuilder(
+                          stream: Firestore.instance
+                              .collection('Users')
+                              .document(snapWorkout.data['userID'])
+                              .snapshots(),
+                          builder: (context, snapUserInfo) {
+                            if (!snapUserInfo.hasData) {
+                              return Container();
+                            }
+                            return InkWell(
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                elevation: 3,
+                                child: Container(
+                                  margin: EdgeInsets.all(3),
+                                  width: MediaQuery.of(context).size.width / 2,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      ListTile(
+                                          leading: CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                                '${snapUserInfo.data['urlProfile']}'),
+                                            backgroundColor: Colors.transparent,
+                                          ),
+                                          title: Text(
+                                            '${snapWorkout.data['workoutName']}',
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                          trailing: Icon(Icons.more_vert)),
+                                      Text(
+                                          'Level: ${snapWorkout.data['level']}'),
+                                      Text('Type: ${snapWorkout.data['type']}'),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => MyPlanPage(
-                                      snapWorkout.documentID,
-                                      snapWorkout.data['workoutName'],
-                                      snapUserInfo.data['urlProfile']),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      );
-                    },
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => MyPlanPage(
+                                        snapWorkout.documentID,
+                                        snapWorkout.data['workoutName'],
+                                        snapUserInfo.data['urlProfile']),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
-                ),
-                Container(
-                  height: 120,
-                  child: favoriteLis,
-                ),
-                Expanded(child: sharePlan),
-              ],
-            );
-          },
+                  Container(
+                    height: 120,
+                    child: favoriteLis,
+                  ),
+                  sharePlan
+                ],
+              );
+            },
+          ),
         ),
-      ),
+      ],
     );
   }
 }

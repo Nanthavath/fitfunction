@@ -21,7 +21,7 @@ class _GetBirthDayPageState extends State<GetBirthDayPage> {
   DateTime selectedDate = DateTime.now();
   String _gender;
 
-  Future<Null> _selectDate(BuildContext context) async {
+  Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
