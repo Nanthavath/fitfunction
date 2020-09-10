@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "199570589142",
-    "firebase_url": "https://fitfunction-1d97a.firebaseio.com",
-    "project_id": "fitfunction-1d97a",
-    "storage_bucket": "fitfunction-1d97a.appspot.com"
+    "project_number": "474383229695",
+    "firebase_url": "https://fitfunction-e5947.firebaseio.com",
+    "project_id": "fitfunction-e5947",
+    "storage_bucket": "fitfunction-e5947.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:199570589142:android:6e0f1bd747907bb3df1077",
+        "mobilesdk_app_id": "1:474383229695:android:208aa60b47f61c5497e2ca",
         "android_client_info": {
           "package_name": "me.fitfunction"
         }
       },
       "oauth_client": [
         {
-          "client_id": "199570589142-oo71sccqjjpi7bv03f6584ffc9a76q4o.apps.googleusercontent.com",
+          "client_id": "474383229695-5p3temg4qoam9m83i8m71fb1rss6h11v.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDcS3dgS8TIyUJVEFn7-m9kouZ1Duh3Dak"
+          "current_key": "AIzaSyBq2WZRdNLf7GZ2nzjSJgkfmFU5c7ok2T8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "199570589142-oo71sccqjjpi7bv03f6584ffc9a76q4o.apps.googleusercontent.com",
+              "client_id": "474383229695-5p3temg4qoam9m83i8m71fb1rss6h11v.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
