@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitfunction/models/adapter.dart';
 import 'package:fitfunction/widgets/circularProgress.dart';
@@ -106,7 +107,13 @@ class _SavePageState extends State<SavePage> {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Image.network(snapPost.data['urlPhoto']),
+                                  CachedNetworkImage(
+                                    imageUrl: snapPost.data['urlPhoto'],
+                                    placeholder: (context, url) =>
+                                        CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                  ),
                                   SizedBox(
                                     height: 10,
                                   ),

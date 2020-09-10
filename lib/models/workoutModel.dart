@@ -49,19 +49,18 @@ class WorkoutModel {
   }
 
   Future<void> upLoadToDatabase() async {
-  //  List data=[];
-    Map<Object, Object> days_map=Map();
-   Map<Object, Object> ex_map=Map();
+    //  List data=[];
+    Map<Object, Object> days_map = Map();
+    Map<Object, Object> ex_map = Map();
+    List favorite=[];
 
-
-    for(int i=0;i<summeryData.length;i++){
-      ex_map=Map();
-      ex_map["Exercises"]=summeryData[i].selectedExercises.toList();
-     // days_map=Map();
-      days_map[summeryData[i].days]=ex_map;
-   //   data.add(days_map);
-    }
-
+    //  for(int i=0;i<summeryData.length;i++){
+    //    ex_map=Map();
+    //    ex_map["Exercises"]=summeryData[i].selectedExercises.toList();
+    //   // days_map=Map();
+    //    days_map[summeryData[i].days]=ex_map;
+    // //   data.add(days_map);
+    //  }
 
     final docRef = await Firestore.instance.collection('Workout').add(
       {
@@ -69,22 +68,35 @@ class WorkoutModel {
         'type': type,
         'level': level,
         'dayPerWeek': dayPerWeek,
-        'days': days_map,
+        //'days': days_map,
         'description': description,
-        'userID':currentUser.uid,
+        'userID': currentUser.uid,
+        'favorite':favorite.toList()
       },
     );
-//    final docEx=await Firestore.instance.collection('Workout').add(
-//      {
-//        'workoutName': namePlan,
-//        'type': type,
-//        'level': level,
-//        'dayPerWeek': dayPerWeek,
-//        'days': selectedDayName.toList(),
-//        'description': description,
-//      },
-//
-//    );
+    // for(var dn in selectedDayName){
+    // final days = await Firestore.instance
+    //     .collection('Workout')
+    //     .document(docRef.documentID)
+    //     .collection('days').document(dn)
+    //     .setData(
+    //   {
+    //     'exercise':
+    //   },
+    // );
+    // }
+     for(int i=0;i<summeryData.length;i++){
+       final days = await Firestore.instance
+           .collection('Workout')
+           .document(docRef.documentID)
+           .collection('days').document(summeryData[i].days)
+           .setData(
+         {
+          'exercise':summeryData[i].selectedExercises.toList(),
+         },
+       );
+     }
+
 //   print(docRef.documentID);
   }
 }

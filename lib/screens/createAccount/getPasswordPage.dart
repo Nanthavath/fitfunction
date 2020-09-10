@@ -3,6 +3,7 @@ import 'package:fitfunction/models/adapter.dart';
 import 'package:fitfunction/models/users.dart';
 import 'package:fitfunction/screens/homePages/homePage.dart';
 import 'package:fitfunction/validator.dart';
+import 'package:fitfunction/widgets/circularProgress.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fitfunction/screens/createAccount/getNamePage.dart';
@@ -12,8 +13,14 @@ final formKey = GlobalKey<FormState>();
 Authen authentication = Authen();
 
 // ignore: must_be_immutable
-class GetPasswordPage extends StatelessWidget {
+class GetPasswordPage extends StatefulWidget {
+  @override
+  _GetPasswordPageState createState() => _GetPasswordPageState();
+}
+
+class _GetPasswordPageState extends State<GetPasswordPage> {
   String _pass;
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -88,38 +95,42 @@ class GetPasswordPage extends StatelessWidget {
       ),
     );
     return Scaffold(
-      body: SafeArea(
-        child: Form(
-          key: formKey,
-          child: Container(
-            margin: EdgeInsets.all(15),
-            child: Column(
-              children: <Widget>[
-                backButton,
-                Text(
-                  'ສ້າງບັນຊີຜູ້ໃຊ້ໃຫມ່',
-                  style: TextStyle(fontSize: 25),
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                Expanded(
-                  child: ListView(
+      body: loading == false
+          ? SafeArea(
+              child: Form(
+                key: formKey,
+                child: Container(
+                  margin: EdgeInsets.all(15),
+                  child: Column(
                     children: <Widget>[
-                      passText,
-                      passwordText,
-                      SizedBox(
-                        height: 15,
+                      backButton,
+                      Text(
+                        'ສ້າງບັນຊີຜູ້ໃຊ້ໃຫມ່',
+                        style: TextStyle(fontSize: 25),
                       ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Expanded(
+                        child: ListView(
+                          children: <Widget>[
+                            passText,
+                            passwordText,
+                            SizedBox(
+                              height: 15,
+                            ),
+                          ],
+                        ),
+                      ),
+                      summitButton
                     ],
                   ),
                 ),
-                summitButton
-              ],
+              ),
+            )
+          : CircularProgress(
+              title: 'ກຳລັງລົງທະບຽນ...',
             ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -128,7 +139,6 @@ class GetPasswordPage extends StatelessWidget {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
       print('${myUser.password}');
-
       return true;
     } else {
       return false;
@@ -136,11 +146,16 @@ class GetPasswordPage extends StatelessWidget {
   }
 
   void submit(BuildContext context) {
+
     myUser.createUserWithEmail().then((value) {
-      print(value.uid);
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => HomePage()),
-          (Route<dynamic> route) => false);
+      setState(() {
+        loading=true;
+        print(value.uid);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => HomePage()),
+                (Route<dynamic> route) => false);
+        loading=false;
+      });
     });
   }
 }

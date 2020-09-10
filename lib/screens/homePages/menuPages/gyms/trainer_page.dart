@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fitfunction/screens/homePages/menuPages/gyms/trainer_detail_page.dart';
 import 'package:fitfunction/widgets/backButton.dart';
 import 'package:fitfunction/widgets/circularProgress.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ class TrainerPage extends StatefulWidget {
 }
 
 String gymID;
+List skill=[];
 
 class _TrainerPageState extends State<TrainerPage> {
   @override
@@ -26,7 +28,7 @@ class _TrainerPageState extends State<TrainerPage> {
                     width: 25,
                   ),
                   Text(
-                    'Trainer',
+                    'ເທຣນເນີ',
                     style: TextStyle(fontSize: 20),
                   )
                 ],
@@ -43,7 +45,64 @@ class _TrainerPageState extends State<TrainerPage> {
                       title: 'ກຳລັງໂຫຼດ...',
                     );
                   }
-                  return Container();
+                  return Container(
+                    child: ListView.builder(
+                      itemCount: snapshot.data.documents.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot snapTrainer =
+                            snapshot.data.documents[index];
+                        skill=snapTrainer.data['skill'];
+
+                        return Container(
+                          child: InkWell(
+                            child: Card(
+                              child: Container(
+                                height: 150,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        width: 100,
+                                        height: 100,
+                                        child: Image(
+                                          image: NetworkImage(
+                                              snapTrainer.data['profile']),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        margin: EdgeInsets.only(top: 15),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              snapTrainer.data['name'],
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text('ທັກສະ:'),
+                                            Text('1. '+skill[0].toString()),
+                                            Text('2. '+skill[1].toString()),
+                                            Text('3. '+skill[2].toString()),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            onTap: (){
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => TrainerDetail(snapTrainer.documentID,snapTrainer.data['name']),));
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  );
                 },
               )),
             ],

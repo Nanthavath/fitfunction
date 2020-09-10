@@ -4,7 +4,7 @@ import 'package:fitfunction/models/adapter.dart';
 import 'package:fitfunction/screens/homePages/menuPages/menu_page.dart';
 import 'package:fitfunction/screens/homePages/postPages/post_page.dart';
 import 'package:fitfunction/screens/homePages/profiles/profile_page.dart';
-import 'file:///C:/Users/Admin/OneDrive/Desktop/fitfunction/lib/screens/homePages/workoutPage/workout_page.dart';
+import 'package:fitfunction/screens/homePages/workoutPage/workout_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,8 +36,9 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black87,
       bottom: TabBar(
+
        // labelColor: Colors.black87,
         //unselectedLabelColor: Colors.black26,
 

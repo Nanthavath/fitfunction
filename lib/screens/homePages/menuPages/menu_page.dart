@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitfunction/authentication.dart';
 import 'package:fitfunction/screens/homePages/menuPages/exercises/exercises_page.dart';
 import 'package:fitfunction/screens/homePages/menuPages/favorite_page.dart';
-import 'file:///C:/Users/Admin/OneDrive/Desktop/fitfunction/lib/screens/homePages/menuPages/gyms/gyms_page.dart';
+import 'package:fitfunction/screens/homePages/menuPages/gyms/gyms_page.dart';
 import 'package:fitfunction/screens/homePages/menuPages/save_page.dart';
 import 'package:fitfunction/screens/loginPage.dart';
 import 'package:fitfunction/widgets/circularProgress.dart';
@@ -51,18 +51,16 @@ class _MenuPageState extends State<MenuPage> {
             children: [
               Center(
                   child: Image.asset(
-                    'images/basic.png',
-                    fit: BoxFit.contain,
-                  )),
-
+                'images/basic.png',
+                fit: BoxFit.contain,
+              )),
               Text(
-                'EXERCISES',
+                'ທ່າອອກກຳລັງກາຍ',
                 style: TextStyle(
                     fontSize: 20,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
               ),
-
             ],
           ),
         ),
@@ -81,10 +79,22 @@ class _MenuPageState extends State<MenuPage> {
         child: Container(
           margin: EdgeInsets.all(10),
           height: 90,
-          child: Text(
-            'GYM',
-            style: TextStyle(
-                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Image(
+                  image: AssetImage('images/gym_icon.png'),
+                ),
+              ),
+              Text(
+                'ສູນອອກກຳລັງກາຍ',
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
         ),
       ),
@@ -102,10 +112,22 @@ class _MenuPageState extends State<MenuPage> {
         child: Container(
           margin: EdgeInsets.all(10),
           height: 90,
-          child: Text(
-            'Favorite',
-            style: TextStyle(
-                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Image(
+                  width: 50,
+                  image: AssetImage('images/favorite.png'),
+
+                ),
+              ),
+              Text(
+                'ລາຍການທີມັກ',
+                style: TextStyle(
+                    fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
         ),
       ),
@@ -126,10 +148,24 @@ class _MenuPageState extends State<MenuPage> {
         child: Container(
           margin: EdgeInsets.all(10),
           height: 90,
-          child: Text(
-            'Save',
-            style: TextStyle(
-                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Image(
+                  width: 40,
+                  height: 40,
+
+                  image: AssetImage('images/save_icon.png'),
+
+                ),
+              ),
+              Text(
+                'ລາຍການທີບັນທຶກ',
+                style: TextStyle(
+                    fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
         ),
       ),
@@ -143,6 +179,7 @@ class _MenuPageState extends State<MenuPage> {
     );
 
     return Scaffold(
+      backgroundColor: Colors.black87,
       body: Container(
         margin: EdgeInsets.all(15),
         child: Column(
@@ -176,8 +213,8 @@ class _MenuPageState extends State<MenuPage> {
               alignment: Alignment.bottomRight,
               child: RaisedButton(
                 child: Text('ອອກຈາກລະບົບ'),
-                onPressed: (){
-                  signOut().then((value){
+                onPressed: () {
+                  signOut().then((value) {
                     CircularProgress(
                       title: 'ກຳລັງອອກຈາກລະບົບ',
                     );

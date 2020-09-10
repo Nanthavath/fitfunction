@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitfunction/screens/homePages/menuPages/gyms/gyms_detail_page.dart';
 import 'package:fitfunction/widgets/backButton.dart';
@@ -8,6 +9,8 @@ class GymPage extends StatefulWidget {
   @override
   _GymPageState createState() => _GymPageState();
 }
+
+double scoreOfReview = 0.0;
 
 class _GymPageState extends State<GymPage> {
   @override
@@ -25,9 +28,9 @@ class _GymPageState extends State<GymPage> {
                     width: 30,
                   ),
                   Text(
-                    'GYM',
+                    'ສູນອອກກຳລັງກາຍ',
                     style: TextStyle(
-                      fontSize: 35,
+                      fontSize: 20,
                     ),
                   ),
                 ],
@@ -38,16 +41,20 @@ class _GymPageState extends State<GymPage> {
                   child: StreamBuilder(
                     stream: Firestore.instance.collection('Gyms').snapshots(),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgress(
                           title: 'ກຳລັງໂຫຼດ...',
                         );
                       }
+
                       return ListView.builder(
                         itemCount: snapshot.data.documents.length,
                         itemBuilder: (context, index) {
                           DocumentSnapshot snapGym =
                               snapshot.data.documents[index];
+
+                          List<String> option =
+                              List.from(snapGym.data['option']);
                           return Container(
                             child: InkWell(
                               child: Card(
@@ -57,8 +64,15 @@ class _GymPageState extends State<GymPage> {
                                     Container(
                                       width: 160,
                                       margin: EdgeInsets.only(right: 10),
-                                      child: Image.network(
-                                        snapGym.data['profileimg'],
+                                      child: CachedNetworkImage(
+                                        imageUrl: snapGym.data['profileImg'],
+                                        progressIndicatorBuilder: (context, url,
+                                                downloadProgress) =>
+                                            CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
                                       ),
                                     ),
                                     Column(
@@ -66,14 +80,16 @@ class _GymPageState extends State<GymPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'On Promotion',
+                                          snapGym.data['promotion'] != null
+                                              ? 'On Promotion'
+                                              : '',
                                           style: TextStyle(
                                             backgroundColor: Colors.green,
                                             color: Colors.white,
                                           ),
                                         ),
                                         Text(
-                                          snapGym.data['gymname'],
+                                          snapGym.data['name'],
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold),
@@ -85,7 +101,7 @@ class _GymPageState extends State<GymPage> {
                                                   color: Colors.green),
                                               borderRadius:
                                                   BorderRadius.circular(5)),
-                                          child: Text('Boxing class'),
+                                          child: Text('${option[0]}'),
                                         ),
                                         SizedBox(
                                           height: 5,
@@ -97,13 +113,57 @@ class _GymPageState extends State<GymPage> {
                                                   color: Colors.green),
                                               borderRadius:
                                                   BorderRadius.circular(5)),
-                                          child: Text('Shower room'),
+                                          child: Text('${option[1]}'),
                                         ),
-                                        Text(
-                                          '8.0/10',
-                                          style: TextStyle(
-                                              backgroundColor: Colors.green,
-                                              color: Colors.white),
+
+                                        ///=======================================================================
+                                        ///Snap Score Review
+                                        Container(
+                                          child: StreamBuilder(
+                                            stream: Firestore.instance
+                                                .collection('ReviewGym')
+                                                .where('gymID',
+                                                    isEqualTo:
+                                                        snapGym.documentID)
+                                                .snapshots(),
+                                            builder: (context, snapScore) {
+                                              if (snapScore.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return CircularProgress(
+                                                  title: 'Loading',
+                                                );
+                                              }
+                                              DocumentSnapshot snap;
+                                              var ratingScore;
+                                              int lengthOfReview = snapScore
+                                                      .data.documents.length *
+                                                  5;
+                                              double score = 0.0;
+                                              List.generate(
+                                                snapScore.data.documents.length,
+                                                (index) {
+                                                  snap = snapScore
+                                                      .data.documents[index];
+                                                  ratingScore =
+                                                      snap.data['score'];
+                                                  score += double.tryParse(
+                                                      ratingScore.toString());
+                                                  scoreOfReview =
+                                                      ((score * 100) /
+                                                              lengthOfReview) /
+                                                          10;
+                                                },
+                                              );
+
+                                              return Text(
+                                                '${scoreOfReview.toStringAsFixed(2).toString()}/10',
+                                                style: TextStyle(
+                                                    backgroundColor:
+                                                        Colors.green,
+                                                    color: Colors.white),
+                                              );
+                                            },
+                                          ),
                                         ),
                                         Row(
                                           children: [
@@ -119,9 +179,11 @@ class _GymPageState extends State<GymPage> {
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => GymsDetail(snapGym.documentID),
+                                    builder: (context) => GymsDetail(
+                                        snapGym.documentID, scoreOfReview),
                                   ),
                                 );
+                                print(option[0]);
                               },
                             ),
                           );

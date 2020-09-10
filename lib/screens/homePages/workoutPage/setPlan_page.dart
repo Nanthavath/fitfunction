@@ -190,9 +190,9 @@ class _SetPlanState extends State<SetPlan> {
 //                                },
                               leading: CircleAvatar(
                                 backgroundImage: NetworkImage(
-                                    snapExercises.data['urlPhoto']),
+                                    snapExercises.data['urlImage']),
                               ),
-                              title: Text(snapExercises.data['exname']),
+                              title: Text(snapExercises.data['name']),
                               subtitle: Text('Type'),
                               trailing: ChoiceChip(
                                 label: Text(' '),

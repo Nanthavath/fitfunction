@@ -169,8 +169,6 @@ class _CommentPageState extends State<CommentPage> {
                         child: Icon(Icons.send),
                         onTap: () {
                           _commentModel.caption = captionController.text;
-                          _commentModel.disPlay();
-                          //print(_commentModel.caption);
                           _commentModel.addComment(postID);
                           captionController.text = '';
                         },

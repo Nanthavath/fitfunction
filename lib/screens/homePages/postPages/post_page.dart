@@ -93,7 +93,7 @@ class _PostPageState extends State<PostPage> {
                 title: 'ກຳລັງໂຫລດ...',
               ),
             );
-          } else if (snapshot == null) {
+          } else if (snapshot.data == null) {
             return Container();
           } else {
             return Column(
@@ -118,6 +118,9 @@ class _PostPageState extends State<PostPage> {
                             .snapshots(),
                         builder: (context, snapName) {
                           if (!snapName.hasData) {
+                            return Container();
+                          }
+                          if (snapName.data == null) {
                             return Container();
                           }
                           return Card(
@@ -194,7 +197,10 @@ class _PostPageState extends State<PostPage> {
                                               : snapPost.data['caption']),
                                     ),
                                   ),
-                                  Image(image: CachedNetworkImageProvider(snapPost.data['urlPhoto'],)),
+                                  Image(
+                                      image: CachedNetworkImageProvider(
+                                    snapPost.data['urlPhoto'],
+                                  )),
                                   Container(
                                     height: 50,
                                     //color: Colors.red,
@@ -243,25 +249,13 @@ class _PostPageState extends State<PostPage> {
                                               .data['uidLike'].length
                                               .toString()),
                                           onPressed: () {
+                                            print(currentUser.uid);
+                                            print(snapPost.documentID);
                                             if (snapPost.data['uidLike']
                                                 .contains(currentUser.uid)) {
-                                              Firestore.instance
-                                                  .collection('Posts')
-                                                  .document(snapPost.documentID)
-                                                  .updateData({
-                                                'uidLike':
-                                                    FieldValue.arrayRemove(
-                                                        [currentUser.uid])
-                                              });
+                                              unLike(snapPost.documentID);
                                             } else {
-                                              Firestore.instance
-                                                  .collection('Posts')
-                                                  .document(snapPost.documentID)
-                                                  .updateData({
-                                                'uidLike':
-                                                    FieldValue.arrayUnion(
-                                                        [currentUser.uid])
-                                              });
+                                              like(snapPost.documentID);
                                             }
                                           },
                                         ),
@@ -328,5 +322,27 @@ class _PostPageState extends State<PostPage> {
         post.deletePost(currentPostID);
         break;
     }
+  }
+
+  Future<void> unLike(String postID)async {
+   await Firestore.instance
+        .collection('Posts')
+        .document(postID)
+        .updateData({
+      'uidLike':
+      FieldValue.arrayRemove(
+          [currentUser.uid])
+    });
+  }
+
+  Future<void> like(String postID)async {
+   await Firestore.instance
+        .collection('Posts')
+        .document(postID)
+        .updateData({
+      'uidLike':
+      FieldValue.arrayUnion(
+          [currentUser.uid])
+    });
   }
 }

@@ -1,4 +1,5 @@
 import 'package:fitfunction/authentication.dart';
+import 'package:fitfunction/babsorptharm/sorptharm1.dart';
 import 'package:fitfunction/models/users.dart';
 import 'package:fitfunction/screens/createAccount/getEmailPage.dart';
 import 'package:fitfunction/screens/createAccount/getNamePage.dart';
@@ -7,7 +8,9 @@ import 'package:fitfunction/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitfunction/models/adapter.dart';
+
 final formKey = GlobalKey<FormState>();
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -149,11 +152,10 @@ class _LoginPageState extends State<LoginPage> {
 
   void submit() {
     authentication.signInWithEmail(email, pass).then((value) {
-     currentUser= value;
+      currentUser = value;
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => HomePage()),
+          MaterialPageRoute(builder: (BuildContext context) => Soptharm1()),
           (Route<dynamic> route) => false);
-
     }).catchError((response) {
       String title = response.code;
       String message = response.message;
@@ -178,13 +180,17 @@ class _LoginPageState extends State<LoginPage> {
         });
   }
 
-  Future<String> switchPage() async{
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    FirebaseUser user = await _auth.currentUser();
-    if (user.uid != null) {
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+  Future<String> switchPage() async {
+    try {
+      FirebaseAuth _auth = FirebaseAuth.instance;
+      FirebaseUser user = await _auth.currentUser();
+      if (user.uid != null) {
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+      }
+      return user.uid;
+    } catch (e) {
+      return e.toString();
     }
-    return user.uid;
   }
 }

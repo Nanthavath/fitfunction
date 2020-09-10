@@ -41,13 +41,13 @@ List<String> days = [
   'Sun',
 ];
 List<String> dayFullname = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday',
+  'ວັນຈັນ',
+  'ວັນອັງຄານ',
+  'ວັນພຸດ',
+  'ວັນພະຫັດ',
+  'ວັນສຸກ',
+  'ວັນເສົາ',
+  'ວັນທິດ',
 ];
 int _selectedDayAmount = 0;
 
@@ -132,7 +132,7 @@ class _CreatePlanState extends State<CreatePlan> {
         GestureDetector(
           onTap: () => setState(() {
             _valueLevel = 1;
-            level = 'Beginner';
+            level = 'ເລີ່ມຕົ້ນ';
           }),
           child: Container(
             width: 60,
@@ -147,7 +147,7 @@ class _CreatePlanState extends State<CreatePlan> {
         GestureDetector(
           onTap: () => setState(() {
             _valueLevel = 2;
-            level = 'Intermediate';
+            level = 'ປານກາງ';
           }),
           child: Container(
             width: 80,
@@ -162,7 +162,7 @@ class _CreatePlanState extends State<CreatePlan> {
         GestureDetector(
           onTap: () => setState(() {
             _valueLevel = 3;
-            level = 'Advance';
+            level = 'ລະດັບສູງ';
           }),
           child: Container(
             width: 70,
@@ -182,7 +182,7 @@ class _CreatePlanState extends State<CreatePlan> {
         GestureDetector(
           onTap: () => setState(() {
             _valueType = 1;
-            type = 'cutting';
+            type = 'ຫຼຸດນ້ຳໜັກ';
           }),
           child: Container(
             width: 56,
@@ -190,7 +190,7 @@ class _CreatePlanState extends State<CreatePlan> {
             child: Column(
               children: [
                 Image.asset('images/cutting_icon.png'),
-                Text('cutting'),
+                Text('ຫຼຸດນ້ຳໜັກ'),
               ],
             ),
           ),
@@ -198,15 +198,15 @@ class _CreatePlanState extends State<CreatePlan> {
         GestureDetector(
           onTap: () => setState(() {
             _valueType = 2;
-            type = 'bulking';
+            type = 'ເພີ່ມນ້ຳໜັກ';
           }),
           child: Container(
-            width: 56,
+            width: 60,
             color: _valueType == 2 ? Colors.orange : Colors.transparent,
             child: Column(
               children: [
                 Image.asset('images/bulking_icon.png'),
-                Text('bulking'),
+                Text('ເພີ່ມນ້ຳໜັກ'),
               ],
             ),
           ),
@@ -214,7 +214,7 @@ class _CreatePlanState extends State<CreatePlan> {
         GestureDetector(
           onTap: () => setState(() {
             _valueType = 3;
-            type = 'general';
+            type = 'ທົວໄປ';
           }),
           child: Container(
             width: 56,
@@ -222,7 +222,7 @@ class _CreatePlanState extends State<CreatePlan> {
             child: Column(
               children: [
                 Image.asset('images/general_icon.png'),
-                Text('general'),
+                Text('ທົວໄປ'),
               ],
             ),
           ),
@@ -230,7 +230,7 @@ class _CreatePlanState extends State<CreatePlan> {
         GestureDetector(
           onTap: () => setState(() {
             _valueType = 4;
-            type = 'sport';
+            type = 'ກິລາ';
           }),
           child: Container(
             width: 56,
@@ -238,7 +238,7 @@ class _CreatePlanState extends State<CreatePlan> {
             child: Column(
               children: [
                 Image.asset('images/sport_icon.png'),
-                Text('sport'),
+                Text('ກິລາ'),
               ],
             ),
           ),

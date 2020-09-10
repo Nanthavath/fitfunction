@@ -19,6 +19,7 @@ List<String> bodyPart = [
   'Upper Leg',
   'Lower Leg'
 ];
+List listBody=[];
 
 class _ExercisePageState extends State<ExercisePage> {
   @override
@@ -97,8 +98,8 @@ class _ExercisePageState extends State<ExercisePage> {
             ),
             Expanded(
               child: Container(
-                child: FutureBuilder(
-                  future: Firestore.instance.collection('Exercises').getDocuments(),
+                child: StreamBuilder(
+                  stream: Firestore.instance.collection('Exercises').snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState==ConnectionState.waiting) {
                       return CircularProgress(
@@ -110,17 +111,19 @@ class _ExercisePageState extends State<ExercisePage> {
                       itemBuilder: (context, index) {
                         DocumentSnapshot snapExercises =
                         snapshot.data.documents[index];
+                        listBody=snapExercises.data['type'];
+                        print(listBody.toString());
                         return Column(
                           children: [
                             ListTile(
                               leading: CircleAvatar(
-                                backgroundImage: NetworkImage(snapExercises.data['urlPhoto']),
+                                backgroundImage: NetworkImage(snapExercises.data['urlImage']),
                               ),
-                              title: Text(snapExercises.data['exname']),
-                              subtitle: Text('Body Part'),
+                              title: Text(snapExercises.data['name']),
+                              //subtitle: Text('${listBody.toList().toString().replaceAll('[', '').replaceAll(']', '')}'),
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => ExcercisesDetail(snapExercises.data['exname'],snapExercises.data['urlPhoto'],snapExercises.data['caption'])));
+                                    builder: (context) => ExcercisesDetail(snapExercises.data['name'],snapExercises.data['urlImage'],snapExercises.data['description'])));
                               },
                             ),
                             Divider(thickness: 1,),

@@ -19,9 +19,10 @@ class _MyPlanPageState extends State<MyPlanPage> {
   String workoutID;
   String workoutName;
   String urlProfile;
-  Map<Object, Object> getDays = new Map();
-  Map<String, Object> getExercises = new Map();
-  List<int> lenhtOfEx = [];
+
+  // Map<Object, Object> getDays = new Map();
+  // Map<String, Object> getExercises = new Map();
+  // List<int> lenhtOfEx = [];
 
   _MyPlanPageState(this.workoutID, this.workoutName, this.urlProfile);
 
@@ -47,16 +48,32 @@ class _MyPlanPageState extends State<MyPlanPage> {
                 if (!snapshot.hasData) {
                   return Container();
                 }
-                getDays = snapshot.data['days'];
-                lenhtOfEx = [];
-                getDays.forEach((key, value) {
-                  getExercises = value;
-                  getExercises.forEach((key, value1) {
-                    List my = value1;
-                    lenhtOfEx.add(my.length);
-                  });
-                });
-//                print(lenhtOfEx);
+                // var doc = snapshot.data['days'].d;
+                // print(doc);
+                // Stream<QuerySnapshot> ds = Firestore.instance
+                //     .collection('Workout')
+                //     .document(workoutID)
+                //     .collection('days')
+                //     .snapshots();
+                // ds.forEach((element) {
+                //
+                //   print(element.documents.toString());
+                // });
+                // getDays = snapshot.data['days'];
+                // lenhtOfEx = [];
+                // if(getDays!=null){
+                //   getDays.forEach((key, value) {
+                //     getExercises = value;
+                //     getExercises.forEach((key, value1) {
+                //       List my = value1;
+                //       lenhtOfEx.add(my.length);
+                //     });
+                //   });
+                // }
+
+//                print(lenhtOfEx)
+                ///====================================================================GetDay
+
                 return Column(
                   children: [
                     SizedBox(
@@ -89,8 +106,9 @@ class _MyPlanPageState extends State<MyPlanPage> {
                               size: 40,
                             ),
                             onPressed: () {
-                              sharePlan()
-                                  .then((value) => successDialog(context, 'ສຳເລັດແລ້ວ'));
+                              sharePlan().then((value) =>
+                                  successDialog(context, 'ສຳເລັດແລ້ວ'));
+                              Navigator.pop(context);
                             },
                           ),
                         ),
@@ -144,15 +162,15 @@ class _MyPlanPageState extends State<MyPlanPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Level: ${snapshot.data['level']}',
+                                'ລະດັບ: ${snapshot.data['level']}',
                                 style: TextStyle(fontSize: 20),
                               ),
                               Text(
-                                'Routine: ${snapshot.data['dayPerWeek']}',
+                                'ຈຳນວນມື້: ${snapshot.data['dayPerWeek']}',
                                 style: TextStyle(fontSize: 20),
                               ),
                               Text(
-                                'Type: ${snapshot.data['type']}',
+                                'ປະເພດ: ${snapshot.data['type']}',
                                 style: TextStyle(fontSize: 20),
                               ),
                             ],
@@ -195,103 +213,120 @@ class _MyPlanPageState extends State<MyPlanPage> {
                         ),
                       ),
                     ),
-                    Column(
-                      children: List.generate(getDays.keys.length, (index) {
-                        return Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 0,
-                                blurRadius: 1,
-                                offset:
-                                    Offset(0, 3), // changes position of shadow
-                              ),
-                            ],
-                            border: Border.all(color: Colors.black, width: 0.5),
-                            borderRadius: BorderRadius.all(Radius.circular(
-                                    10.0) //                 <--- border radius here
-                                ),
-                          ),
-                          height: 110,
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Day-${index + 1}',
-                                        style: TextStyle(
-                                            fontSize: 23,
-                                            color: Colors.orange,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        '${getDays.keys.toList() == null ? 0 : getDays.keys.toList()[index]}',
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Image.asset(
-                                        'images/dumbbell.png',
-                                        width: 40,
-                                      ),
-                                      Text(
-                                        ' ${lenhtOfEx[index]}',
-                                        style: TextStyle(
-                                            fontSize: 25,
-                                            color: Colors.orange,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                              PopupMenuButton(
-                                  onSelected: (value) {
-                                    value = 1;
+                    Container(
+                      child: StreamBuilder(
+                        stream: Firestore.instance.collection('Workout').document(workoutID).collection('days').snapshots(),
+                        builder: (context, snaSubDocument) {
+                          if (!snaSubDocument.hasData) {
+                            return Container();
+                          }
+                          return Column(
+                            children: List.generate(snaSubDocument.data.documents.length, (index) {
 
-                                    deleteDay(getDays.keys.toList()[index]);
-//                                    print(getDays.keys.toList()[index]);
-                                  },
-                                  itemBuilder: (context) => [
-                                        PopupMenuItem(
-                                          value: 1,
-                                          child: Text('Delete'),
+                              DocumentSnapshot snap=snaSubDocument.data.documents[index];
+
+                              return Container(
+                                padding:
+                                EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 0,
+                                      blurRadius: 1,
+                                      offset:
+                                      Offset(0, 3), // changes position of shadow
+                                    ),
+                                  ],
+                                  border: Border.all(color: Colors.black, width: 0.5),
+                                  borderRadius: BorderRadius.all(Radius.circular(
+                                      10.0) //                 <--- border radius here
+                                  ),
+                                ),
+                                height: 110,
+                                margin:
+                                EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Day-${index + 1}',
+                                              style: TextStyle(
+                                                  fontSize: 23,
+                                                  color: Colors.orange,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              '${snap.documentID}',
+                                              style: TextStyle(
+                                                fontSize: 17,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ])
-                            ],
-                          ),
-                        );
-                      }),
+                                        Row(
+                                          children: [
+                                            Image.asset(
+                                              'images/dumbbell.png',
+                                              width: 40,
+                                            ),
+                                            Text(
+                                              ' ${snap.data['exercise'].length.toString()}',
+                                              style: TextStyle(
+                                                  fontSize: 25,
+                                                  color: Colors.orange,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    PopupMenuButton(
+                                        onSelected: (value) {
+                                          value = 1;
+                                          deleteDay(snap.documentID).then((value){
+                                            Scaffold.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  'ລຶບສຳເລັດແລ້ວ',
+                                                  style: TextStyle(
+                                                      color:
+                                                      Colors.red),
+                                                  textAlign: TextAlign
+                                                      .center,
+                                                ),
+                                              ),
+                                            );
+                                          });
+
+                                        },
+                                        itemBuilder: (context) => [
+                                          PopupMenuItem(
+                                            value: 1,
+                                            child: Icon(Icons.delete,color: Colors.red,),
+                                          ),
+                                        ])
+                                  ],
+                                ),
+                              );
+                            }),
+                          );
+                        },
+                      ),
                     ),
-//                  ListView.builder(
-//                    shrinkWrap: true,
-//                    physics: NeverScrollableScrollPhysics(),
-//                    itemCount: 5,
-//                    itemBuilder: (context, index) {
-//                     // DocumentSnapshot snapDetail=snapshot.data.documents[index];
-//
-//                    },
-//                  )
                   ],
                 );
               },
@@ -303,17 +338,7 @@ class _MyPlanPageState extends State<MyPlanPage> {
   }
 
   Future<void> deleteDay(String day) async {
-//    Map<Object,Object> del=new Map();
-//    del['days']=day;
-    print(day);
-    await Firestore.instance
-        .collection('Workout')
-        .document(workoutID)
-        .updateData({
-      'days': FieldValue.arrayRemove([day])
-    }).whenComplete(() {
-      print('Field Deleted');
-    });
+    await Firestore.instance.collection('Workout').document(workoutID).collection('days').document(day).delete();
 
   }
 

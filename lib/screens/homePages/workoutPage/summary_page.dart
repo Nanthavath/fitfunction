@@ -99,11 +99,14 @@ class _SummaryPageState extends State<SummaryPage> {
                   title: 'Finish',
                   onPressed: () {
                     workoutModel.upLoadToDatabase().then((value) {
-                      successDialog(context, 'ສຳເລັດແລ້ວ',neutralAction: (){
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => WorkoutPage()));
+                      successDialog(context, 'ສຳເລັດແລ້ວ', neutralAction: () {
+                        // Navigator.of(context).push(
+                        //     MaterialPageRoute(builder: (BuildContext context) => WorkoutPage()));
+                        Navigator.maybePop(context).then((value) {
+                          Navigator.maybePop(context)
+                              .then((value) => Navigator.pop(context));
+                        });
                       });
-
                     });
                   },
                 ),
